@@ -1,2 +1,2 @@
-# janapese-health-monitor
+# japanese-health-monitor
 Health monitoring system
