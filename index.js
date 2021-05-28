@@ -6,13 +6,12 @@ const app = express();
 
 const config = require('./config/index');
 const { connectivity } = require('./config/db');
-// const { logger } = require('./middlewares/log');
+const logger  = require('./utils/logger');
 
 var normalizedPath = require('path').join(__dirname, 'routes');
 
 app
     .use(cors())
-    // .use(logger)
     .use(morgan('dev'))
     .use(json({ limit: '3mb', extended: true }))
     .use(urlencoded({ limit: '3mb', extended: true }))
@@ -34,7 +33,8 @@ app
                 .forEach(file => {
                     require('./routes/' + file)(app);
                 });
-            console.log(`Server successfully started!`);
+                console.log('Server started successfully!')
+            logger.info('Server started successfully!')
         });
     });
 module.exports = app;
