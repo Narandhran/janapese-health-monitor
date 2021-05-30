@@ -34,7 +34,7 @@ app
                     require('./routes/' + file)(app);
                 });
                 console.log('Server started successfully!')
-            logger.info('Server started successfully!')
+            // logger.info('Server started successfully!')
         });
     });
 module.exports = app;
