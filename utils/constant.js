@@ -14,5 +14,11 @@ module.exports.initAdmin = {
     "email": "admin@gmail.com",
     "schedule": ["monday", "wednesday", "friday"],
     "mobile": "0000000000",
-    "password": "password"
+    "password": "password",
+    "status": true
+}
+module.exports.verifyOTP = (inputOTP, verifyObject) => {
+    let { otp, expire } = verifyObject;
+    if (otp == inputOTP) return true;
+    else return false;
 }

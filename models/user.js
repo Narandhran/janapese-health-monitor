@@ -13,11 +13,16 @@ const userSchema = new mongoose.Schema({
         index: true,
         required: true,
         unique: true,
-        lowercase: true
+        uppercase: true
     },
     role: {
         type: String,
+        default: 'USER',
         uppercase: true
+    },
+    access: {
+        type: [String],
+        default: ['ALL']
     },
     gender: {
         type: String,
@@ -56,10 +61,18 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
+    department: {
+        type: String,
+        lowercase: true
+    },
     uuid: {
         type: String,
         index: true,
         unique: true
+    },
+    isInfected: {
+        type: Boolean,
+        default: false
     },
     schedule: {
         type: [String]
@@ -67,7 +80,7 @@ const userSchema = new mongoose.Schema({
     status: {
         type: Boolean,
         required: true,
-        default: true
+        default: false
     }
 }, { collection: 'users', timestamps: true });
 
