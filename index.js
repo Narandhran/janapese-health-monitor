@@ -1,3 +1,8 @@
+/**
+ * @author - itsNaren
+ * @description - User controller file
+ * @date - 2021-05-30 20:06:21
+**/
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
@@ -6,8 +11,9 @@ const app = express();
 
 const config = require('./config/index');
 const { connectivity } = require('./config/db');
-const logger  = require('./utils/logger');
+const logger = require('./utils/logger');
 
+const { initUser } = require('./controllers/user');
 var normalizedPath = require('path').join(__dirname, 'routes');
 
 app
@@ -33,7 +39,8 @@ app
                 .forEach(file => {
                     require('./routes/' + file)(app);
                 });
-                console.log('Server started successfully!')
+            initUser();
+            console.log('Server started successfully!')
             // logger.info('Server started successfully!')
         });
     });

@@ -1,9 +1,28 @@
+/**
+ * @author - itsNaren
+ * @description - User controller file
+ * @date - 2021-05-30 21:25:45
+**/
 const User = require('../models/user');
 const { validate } = require('../utils/crypto');
 const { sign } = require('../utils/jwt');
-const { countryCode } = require('../utils/constant');
+const { countryCode, initAdmin } = require('../utils/constant');
 const { errorHandler, successHandler } = require('../utils/handler');
 module.exports = {
+    /**
+     * For initialization purpose only
+     */
+    initUser: async () => {
+        let isAdmin = await User.findOne({ name: initAdmin.name }).lean();
+        if (!isAdmin) {
+            User.create(initAdmin, (err, data) => {
+                if (err) console.log('error');
+            });
+        }
+    },
+    /**
+     * Web Registration
+     */
     register: async (req, res) => {
         let userObj = req.body;
         let uuid = `${userObj.mobile}${userObj.countryCode || countryCode}`;
@@ -15,6 +34,9 @@ module.exports = {
             else successHandler(req, res, 'Success', data);
         });
     },
+    /**
+     * Web Login
+     */
     login: async (req, res) => {
         console.log('helllo')
         let { email, password } = req.body;

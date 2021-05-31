@@ -6,3 +6,13 @@ module.exports.jwt = {
     algorithm: 'RS256'
 };
 module.exports.countryCode = '81';
+module.exports.initAdmin = {
+    "name": "Admin",
+    "empId": "J000",
+    "role": "Admin",
+    "gender": "male",
+    "email": "admin@gmail.com",
+    "schedule": ["monday", "wednesday", "friday"],
+    "mobile": "0000000000",
+    "password": "password"
+}
