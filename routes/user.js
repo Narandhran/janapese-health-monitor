@@ -1,6 +1,25 @@
 const userControl = require('../controllers/user');
 const { authenticate, authorize } = require('../middlewares/auth');
 module.exports = app => {
-    app.post('/user/register', authenticate, authorize(['ADMIN']), userControl.register)
-    app.post('/user/login', userControl.login)
+    /**
+     * Web routes
+     */
+    app.post('/user/p/login', userControl.login);
+    app.post('/user/p/register', authenticate, authorize(['ADMIN']), userControl.register);
+    app.get('/user/p/dashboard', authenticate, authorize(['ADMIN']), userControl.dashboard);
+    app.post('/user/p/add_employee', authenticate, authorize(['ADMIN']), userControl.addEmployee);
+
+
+    /**
+     * Mobiler routes
+     */
+    app.post('/user/m/register', userControl.mRegister);
+    app.post('/user/m/login', userControl.mLogin);
+
+    /**
+     * Common routes
+     */
+    app.post('/user/c/request_otp', userControl.requestOTP);
+    app.post('/user/c/reset_password', userControl.resetPassword);
+
 }
