@@ -6,7 +6,9 @@
 const User = require('../models/user');
 const { validate } = require('../utils/crypto');
 const { sign } = require('../utils/jwt');
-const { countryCode, initAdmin, verifyOTP } = require('../utils/constant');
+const { initAdmin, verifyOTP } = require('../utils/constant');
+const XL2JSON = require('../utils/excel2json');
+const { loadMulter } = require('../utils/multer');
 const GENERATOR = require('../utils/string_generator');
 const { errorHandler, successHandler } = require('../utils/handler');
 
@@ -23,6 +25,41 @@ module.exports = {
                 if (err) console.log('error');
             });
         }
+    },
+    /**
+     * Web import users
+     */
+    importUsers: async (req, res) => {
+        let upload = loadMulter(20).single('users-file');
+        await upload(req, null, async (err) => {
+            if (err) {
+                errorHandler(req, res, err);
+            }
+            else {
+                let persisted = await XL2JSON.convert(req.file.filename);
+                let users = persisted.Sheet1;
+                let dataError = false;
+                if (users && users.length > 0) {
+                    users.map((e, i) => {
+                        if (e.email == '' || e.email == undefined || e.email == null
+                            || e.empId == '' || e.empId == undefined || e.empId == null)
+                            dataError = true;
+                        if (e.access)
+                            e.access = ((e.access).toUpperCase()).split(',');
+                        e.role = e.role ? (e.role).toUpperCase() : 'USER';
+                        e.email = (e.email).toLowerCase();
+                    });
+                    if (dataError) errorHandler(req, res, new Error('Employee number and Email should\'t be empty, check the excel sheet properly.'));
+                    else {
+                        await User.insertMany(users, (err, data) => {
+                            if (err) errorHandler(req, res, err);
+                            successHandler(req, res, 'Users imported successfully!', {});
+                        });
+                    }
+                }
+                else errorHandler(req, res, new Error('Data is either empty or not valid'));
+            }
+        });
     },
     /**
      * Web Registration
@@ -135,6 +172,5 @@ module.exports = {
             successHandler(req, res, 'Password updated successfully!', {});
         }
         else errorHandler(req, res, new Error('Invalid OTP, try again!'));
-
     },
 }

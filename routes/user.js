@@ -8,6 +8,7 @@ module.exports = app => {
     app.post('/user/p/register', authenticate, authorize(['ADMIN']), userControl.register);
     app.get('/user/p/dashboard', authenticate, authorize(['ADMIN']), userControl.dashboard);
     app.post('/user/p/add_employee', authenticate, authorize(['ADMIN']), userControl.addEmployee);
+    app.post('/user/p/import_user',userControl.importUsers);
 
 
     /**

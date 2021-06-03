@@ -13,7 +13,7 @@ module.exports = {
      */
     editReport: async (req, res) => {
         await MedicalReport
-            .findByIdAndUpdate(req.query._id, request.body, { new: true })
+            .findByIdAndUpdate(req.params._id, request.body, { new: true })
             .exec(async (err, data) => {
                 if (err) errorHandler(req, res, err);
                 else {

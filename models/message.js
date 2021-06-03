@@ -26,5 +26,5 @@ const messageSchema = new mongoose.Schema({
     }
 }, { collection: 'messages', timestamps: true });
 
-userSchema.plugin(uniqueValidator);
+messageSchema.plugin(uniqueValidator);
 module.exports = mongoose.model('Message', messageSchema);

@@ -1,4 +1,8 @@
-
+/**
+ * @author - itsNaren
+ * @description - Custom error handler
+ * @date - 2021-05-31 14:13:04
+**/
 var wrapError = (request, status, message, error) => {
     /*
      errorLogger.log('error', {
