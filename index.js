@@ -16,6 +16,7 @@ const { connectivity } = require('./config/db');
 const logger = require('./utils/logger');
 
 const swaggerDocument = YAML.load('./config/swagger.yaml');
+swaggerDocument.host = process.env.SWAGGER_URI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const { initUser } = require('./controllers/user');

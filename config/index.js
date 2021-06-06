@@ -24,11 +24,3 @@ module.exports.db = {
 module.exports.server = {
     port: '8084'
 }
-
-module.exports.aws = {
-
-}
-
-module.exports.mail = {
-
-}

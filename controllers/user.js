@@ -94,6 +94,7 @@ module.exports = {
      */
     dashboard: async (req, res) => {
         let total = 0, registered = 0, infected = 0, unregistered = 0;
+        // let token = req.verifiedToken;
         await User.find({}, (err, data) => {
             if (err) errorHandler(req, res, err);
             else {
