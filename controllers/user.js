@@ -10,6 +10,7 @@ const { initAdmin, verifyOTP } = require('../utils/constant');
 const XL2JSON = require('../utils/excel2json');
 const { loadMulter } = require('../utils/multer');
 const GENERATOR = require('../utils/string_generator');
+const { sendMail } = require('../utils/mailer');
 const { errorHandler, successHandler } = require('../utils/handler');
 
 
@@ -21,7 +22,7 @@ module.exports = {
     initUser: async () => {
         let isAdmin = await User.findOne({ name: initAdmin.name }).lean();
         if (!isAdmin) {
-            User.create({ ...initAdmin, uuid: GENERATOR.generateUUID(userObj.empId) }, (err, data) => {
+            User.create({ ...initAdmin, uuid: GENERATOR.generateUUID('OW001') }, (err, data) => {
                 if (err) console.log('error');
             });
         }
@@ -114,7 +115,7 @@ module.exports = {
         userObj.uuid = GENERATOR.generateUUID(userObj.empId);
         await User.create(userObj, (err, data) => {
             if (err) errorHandler(req, res, err);
-            else successHandler(req, res, 'User added successfully!!', {});
+            else successHandler(req, res, 'User added successfully!!', { success: true });
         })
     },
     /**
@@ -155,22 +156,49 @@ module.exports = {
         let isUser = await User.findOne({ email: req.body.email });
         if (!isUser) errorHandler(req, res, new Error('User is not exist, kindly ask admin!!'));
         else {
-            //Mail logic to send OTP
-            successHandler(req, res, 'OTP send successfully!!', {});
+            let otp = GENERATOR.generateOTP();
+            sendMail(req, res,
+                {
+                    to: isUser.email,
+                    subject: 'Request to verify your account',
+                },
+                {
+                    fullname: isUser.name,
+                    otp: otp,
+                    message: 'verify your account'
+                }
+                , 'otp-template.html'
+            ).then(async () => {
+                isUser.verify = { otp: otp };
+                await isUser.save();
+                successHandler(req, res, 'OTP sent successfully', { success: true })
+            }).catch(e => errorHandler(req, res, e));
         }
     },
     /**
      * Reset password
      */
     resetPassword: async (req, res) => {
-        let { email, otp, password } = req
+        let { email, otp, password } = req.body;
         let isUser = await User.findOne({ email });
         if (!isUser) errorHandler(req, res, new Error('Something went wrong!!'));
         else if (verifyOTP(otp, isUser.verify)) {
             isUser.password = password;
             await isUser.save();
-            successHandler(req, res, 'Password updated successfully!', {});
+            successHandler(req, res, 'Password updated successfully!', { success: true });
         }
         else errorHandler(req, res, new Error('Invalid OTP, try again!'));
     },
+    /**
+     * Verify account
+     */
+    verifyAccount: async (req, res) => {
+        let { email, otp } = req.body;
+        let isUser = await User.findOne({ email });
+        if (!isUser) errorHandler(req, res, new Error('Something went wrong!!'));
+        else {
+            if (isUser.verify.otp == otp) successHandler(req, res, 'OTP verified successfully', { success: true });
+            else errorHandler(req, res, new Error('Invalid OTP, try again!'));
+        }
+    }
 }

@@ -25,3 +25,16 @@ module.exports.verifyOTP = (inputOTP, verifyObject) => {
 module.exports.FCM_CONSTANT = {
     server_key: 'AAAABihWQgk:APA91bGFAm6yTXG-5xwKw0j2bzPUnlG0LS4q8d6uPYmYxG3wgApSwgRLhFHfVeakWlXk9iRn-NDm5E97L0JGy27sAM0IKpXVAepKtNRk8of9qEenmoMfRtBFquvrwtoNP3pm8BIGDHD6'
 }
+module.exports.mail = {
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    service: 'Gmail',
+    type: 'OAuth2',
+    redirectUrl: 'https://developers.google.com/oauthplayground',
+    user: 'virtualacc2021@gmail.com',
+    clientId: '232047250421-9tsc6k1u2oh3h7c94jm12fg6lv4gso5m.apps.googleusercontent.com',
+    clientSecret: 'gphftms6OlN8YH-nXQDG0WPP',
+    refreshToken: '1//0424IqSkGIQB3CgYIARAAGAQSNwF-L9Irh2cPZp7VdOu31dAJA5UD3d9Nb8_2NpP-8xVJbyU4h6EgeovJrbGi9i2rSo-woqvYFLY',
+    accessToken: 'ya29.a0AfH6SMByuIhKYZqinP3cXJ3l-U5DVoM_8KL8G-h5ukLSTN09xNmuBiRvOZlchsgCVbRrl-Q9r1MPYV9yKt8KIb1Y0TfaY4mpUv1swJOz27P4zfZ70l3Q1SvJiGew1shIdxqZRKGQrunMscacB0LsFTF9cpFd',
+}

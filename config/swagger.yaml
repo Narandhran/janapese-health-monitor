@@ -1,0 +1,505 @@
+swagger: '2.0'
+info:
+  version: 1.1.4
+  title: Japanese Health Monitor API documentation
+  description: '@Author, Narandhran Thangavel'
+  termsOfService: 'http://swagger.io/terms/'
+  contact:
+    name: Orgware
+    email: admin@orgware.com
+    url: 'https://www.orgware.in/'
+host: localhost:8084
+basePath: /
+schemes:
+  - http
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  bearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header
+paths:
+  /user/p/login:
+    post:
+      summary: Admin login
+      tags:
+        - User-web
+      description: Admin login
+      consumes: 
+        - application/json
+      produces: 
+        - application/json
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+      parameters:
+        - in: body
+          name: login
+          required: true
+          description: ''
+          schema:
+            properties:
+              email:
+                type: string
+              password:
+                type: string
+  /user/p/register:
+    post:
+      summary: register
+      tags:
+        - User-web
+      description: Register the user from portal
+      consumes: 
+        - application/json
+      produces: 
+        - application/json
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorize
+      parameters:
+        - in: body
+          name: register
+          required: true
+          description: ''
+          schema:
+            properties:
+              name:
+                type: string
+              empId:
+                type: string
+              email:
+                type: string
+              department:
+                type: string
+              access:
+                type: array
+                items:
+                  type: string
+              role:
+                type: string
+  /user/p/dashboard:
+    get:
+      summary: View dashboard
+      tags:
+        - User-web
+      description: View dashboard
+      consumes: 
+        - application/json
+      produces: 
+        - application/json
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+        '204':
+          description: Content not found
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+  /user/p/import_user:
+    post:
+      summary: Import users from excel
+      tags:
+        - User-web
+      description: Import users from excel
+      consumes: 
+        - multipart/form-data
+      produces: 
+        - application/json
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+      parameters:
+        - name: users-file
+          in: formData
+          type: file
+          description: choose the excel file
+          required: true
+  /user/m/register:
+    post:
+      summary: Initial verification
+      tags:
+        - User-mobile
+      description: Initial verification
+      consumes: 
+        - application/json
+      produces: 
+        - application/json
+      security: []
+      responses:
+        '200':
+          description: Success
+        '204':
+          description: Content not found
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+      parameters:
+        - in: body
+          name: Verify
+          required: true
+          description: ''
+          schema:
+            properties:
+              email:
+                type: string
+              otp:
+                type: string
+  /user/m/verify:
+    post:
+      summary: OTP verification
+      tags:
+        - User-mobile
+      description: OTP verification
+      consumes: 
+        - application/json
+      produces: 
+        - application/json
+      security: []
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+      parameters:
+        - in: body
+          name: Verify
+          required: true
+          description: ''
+          schema:
+            properties:
+              email:
+                type: string
+              otp:
+                type: string             
+  /user/m/login:
+    post:
+      summary: Login
+      tags:
+        - User-mobile
+      description: Login
+      consumes: 
+        - application/json
+      produces: 
+        - application/json
+      security: []
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+      parameters:
+        - in: body
+          name: login
+          required: true
+          description: ''
+          schema:
+            properties:
+              email:
+                type: string
+              password:
+                type: string
+  /user/c/request_otp:
+    post:
+      summary: Request OTP
+      tags:
+        - User
+      description: Request OTP
+      consumes: 
+        - application/json
+      produces: 
+        - application/json
+      security: []
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+      parameters:
+        - in: body
+          name: otp
+          required: true
+          description: ''
+          schema:
+            properties:
+              email:
+                type: string
+  /user/c/reset_password:
+    post:
+      summary: Reset password
+      tags:
+        - User
+      description: Reset password
+      consumes: 
+        - application/json
+      produces: 
+        - application/json
+      security: []
+      responses:
+        '200':
+          description: Success
+        '204':
+          description: Content not found
+        '400':
+          description: Bad request
+      parameters:
+        - in: body
+          name: reset
+          required: true
+          description: ''
+          schema:
+            properties:
+              email:
+                type: string
+              otp:
+                type: string
+              password: 
+                type: string
+  /qa/c/create:
+    post:
+      summary: Create a question
+      tags: 
+        - QA-web
+      description: Create a question
+      consumes: 
+        - application/json
+      produces:
+        - application/json
+      security:
+        - bearerAuth: []
+      responses: 
+        '200':
+          description: Success
+        '204':
+          description: Content not found
+        '400':
+          description: Bad request
+      parameters:
+        - in: body
+          name: create
+          required: true
+          description: ''
+          schema: 
+            properties:
+              question: 
+                type: string
+              type: 
+                type: string
+              options:
+                type: array
+                items: 
+                  type: string
+  /qa/c/update/{_id}: 
+    put:
+      summary: Update questions
+      tags:
+        - QA-web
+      description: Update questions
+      consumes:
+        - application/json
+      produces: 
+        - application/json
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+        '204':
+          description: Content not found
+        '400':
+          description: Bad request
+      parameters:
+        - in: body
+          name: update
+          required: true
+          description: ''
+          schema:
+            properties:
+              question: 
+                type: string
+              type: 
+                type: string
+              options:
+                type: array
+                items: 
+                  type: string
+        - in: path
+          name: _id
+          type: string
+          description: ''
+          required: true
+  /qa/c/view:
+    get:
+      summary: View all question and answer
+      tags:
+        - QA-web
+      description: View all question and answer
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - bearerAuth: []
+      responses:
+        '200': 
+          description: success
+        '204': 
+          description: content not found
+  /qa_user/m/create_update:
+    post:
+      summary: Create or update QA data
+      tags: 
+        - QA-mobile
+      description: Create or update QA data
+      consumes: 
+        - application/json
+      produces:
+        - application/json
+      security:
+        - bearerAuth: []
+      responses: 
+        '200':
+          description: Success
+        '204':
+          description: Content not found
+        '400':
+          description: Bad request
+      parameters:
+        - in: body
+          name: createOrUpdate
+          required: true
+          description: ''
+          schema: 
+            properties:
+              empId: 
+                type: string
+              data: 
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    question: 
+                      type: string
+                    type:
+                      type: string
+                    options:
+                      type: array
+                      items: 
+                        type: string
+                    answer:
+                      type: string
+  /message/p/create:
+    post:
+      summary: Create message
+      tags: 
+        - Message-web
+      description: Create message
+      consumes: 
+        - application/json
+      produces:
+        - application/json
+      security:
+        - bearerAuth: []
+      responses: 
+        '200':
+          description: Success
+        '204':
+          description: Content not found
+        '400':
+          description: Bad request
+      parameters:
+        - in: body
+          name: create
+          required: true
+          description: ''
+          schema: 
+            type: array
+            items:
+              type: object
+              properties:
+                empId: 
+                  type: string
+                title: 
+                  type: string
+                message: 
+                  type: string
+                isForAll: 
+                  type: boolean
+                  default: false
+  /message/m/view_messages/{empId}:
+    put:
+      summary: View messages
+      tags:
+        - Message-mobile
+      description: View messages
+      consumes:
+        - application/json
+      produces: 
+        - application/json
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+        '204':
+          description: Content not found
+        '400':
+          description: Bad request
+      parameters:
+        - in: path
+          name: empId
+          type: string
+          description: ''
+          required: true
+  /dashboard/m/view/{empId}:
+    get:  
+      summary: View dashboard
+      tags:
+        - Health Management
+      description: View dashboard
+      consumes: 
+        - application/json
+      produces: 
+        - application/json
+      security:
+        - bearerAuth: []
+      responses:
+        '200': 
+          description: success
+        '400': 
+          description: Bad request
+      parameters:
+        - in: path
+          name: empId
+          type: string
+          description: ''
+          required: true

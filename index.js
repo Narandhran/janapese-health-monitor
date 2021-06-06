@@ -6,12 +6,17 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
 const { json, urlencoded } = require('body-parser');
 const app = express();
 
 const config = require('./config/index');
 const { connectivity } = require('./config/db');
 const logger = require('./utils/logger');
+
+const swaggerDocument = YAML.load('./config/swagger.yaml');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const { initUser } = require('./controllers/user');
 var normalizedPath = require('path').join(__dirname, 'routes');

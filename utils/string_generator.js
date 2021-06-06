@@ -1,3 +1,4 @@
+const _ = require('lodash');
 var onlyNumber = '123456789';
 var onlySmallCase = 'abcdefghijklmnopqrstuvwxyz';
 var onlyBigCase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -23,3 +24,7 @@ module.exports.generateUUID = (empId, countryCode = '81') => {
     }
     return uuid;
 };
+
+module.exports.generateOTP = () => {
+    return _.random(1000, 9999);
+}
