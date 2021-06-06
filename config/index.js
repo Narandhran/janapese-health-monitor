@@ -7,10 +7,11 @@ module.exports.db = {
         db: 'health_monitor'
     },
     dev: {
-        username: '',
-        password: '',
-        port: '',
-        db: ''
+        username: 'appacc',
+        password: 'AppAceRWO',
+        host: 'localhost',
+        port: '27017',
+        db: 'employeeapp'
     },
     prod: {
         username: '',
