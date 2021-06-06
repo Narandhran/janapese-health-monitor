@@ -89,10 +89,12 @@ paths:
                 type: string
               access:
                 type: array
+                default: []
                 items:
                   type: string
               role:
                 type: string
+                default: 'USER'
   /user/p/dashboard:
     get:
       summary: View dashboard

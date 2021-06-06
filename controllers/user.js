@@ -67,7 +67,7 @@ module.exports = {
      */
     register: async (req, res) => {
         let userObj = req.body;
-        userObj.uuid = GENERATOR.generateUUID(userObj.empId);
+        userObj.uuid = GENERATOR.generateUUID((userObj.empId).toUpperCase());
         await User.create(userObj, (err, data) => {
             if (err) errorHandler(req, res, err);
             else successHandler(req, res, 'Success', data);
@@ -139,14 +139,16 @@ module.exports = {
         let { email, password } = req.body;
         let isUser = await User.findOne({ email }).lean();
         if (!isUser.status) errorHandler(req, res, new Error('Email not verified yet!!'));
-        else if (isUser && validate(password, isUser.password)) {
-            let payload = {
-                empId: isUser.empId,
-                _id: isUser._id,
-                role: isUser.role,
-                access: isUser.role.toLowerCase() == 'admin' ? isUser.access : ['none']
-            };
-            successHandler(req, res, 'Login success', { uuid: isUser.uuid, token: sign(payload) });
+        else if (isUser) {
+            if (validate(password, isUser.password)) {
+                let payload = {
+                    empId: isUser.empId,
+                    _id: isUser._id,
+                    role: isUser.role,
+                    access: isUser.role.toLowerCase() == 'admin' ? isUser.access : ['none']
+                };
+                successHandler(req, res, 'Login success', { uuid: isUser.uuid, token: sign(payload) });
+            } else errorHandler(req, res, new Error('Incorrect password, try again!'));
         } else errorHandler(req, res, new Error('User not exist!!'));
     },
     /**
@@ -197,7 +199,11 @@ module.exports = {
         let isUser = await User.findOne({ email });
         if (!isUser) errorHandler(req, res, new Error('Something went wrong!!'));
         else {
-            if (isUser.verify.otp == otp) successHandler(req, res, 'OTP verified successfully', { success: true });
+            if (isUser.verify.otp == otp) {
+                isUser.status = true;
+                await isUser.save();
+                successHandler(req, res, 'OTP verified successfully', { success: true });
+            }
             else errorHandler(req, res, new Error('Invalid OTP, try again!'));
         }
     }
