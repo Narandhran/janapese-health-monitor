@@ -63,7 +63,7 @@ const userSchema = new mongoose.Schema({
     },
     department: {
         type: String,
-        lowercase: true
+        uppercase: true
     },
     uuid: {
         type: String,

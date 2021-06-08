@@ -79,14 +79,17 @@ module.exports = {
     login: async (req, res) => {
         let { email, password } = req.body;
         let isUser = await User.findOne({ email }).lean();
-        if (isUser && validate(password, isUser.password)) {
-            let payload = {
-                empId: isUser.empId,
-                _id: isUser._id,
-                role: isUser.role,
-                access: isUser.role.toLowerCase() == 'admin' ? isUser.access : ['none']
-            };
-            successHandler(req, res, 'Login success', sign(payload));
+        if (isUser) {
+            if(validate(password, isUser.password)){
+                let payload = {
+                    empId: isUser.empId,
+                    _id: isUser._id,
+                    role: isUser.role,
+                    access: isUser.role.toLowerCase() == 'admin' ? isUser.access : ['none']
+                };
+                successHandler(req, res, 'Login success', sign(payload));
+            }
+            else errorHandler(req,res,new Error('Incorrect password, try again!'))
         } else errorHandler(req, res, new Error('User not exist!!'));
     },
     /**
@@ -94,8 +97,12 @@ module.exports = {
      */
     dashboard: async (req, res) => {
         let total = 0, registered = 0, infected = 0, unregistered = 0;
-        // let token = req.verifiedToken;
-        await User.find({}, (err, data) => {
+        let access = req.verifiedToken.access;
+        let subQuery = { 'department': { $ne: 'ALL' } };
+        if (access.length > 0 && access[0] != 'ALL') {
+            subQuery = { 'department': { $in: access } };
+        }
+        await User.find(subQuery, (err, data) => {
             if (err) errorHandler(req, res, err);
             else {
                 data.forEach((user, index) => {
@@ -139,9 +146,9 @@ module.exports = {
     mLogin: async (req, res) => {
         let { email, password } = req.body;
         let isUser = await User.findOne({ email }).lean();
-        if (!isUser.status) errorHandler(req, res, new Error('Email not verified yet!!'));
-        else if (isUser) {
-            if (validate(password, isUser.password)) {
+        if (isUser) {
+            if (!isUser.status) errorHandler(req, res, new Error('Email not verified yet!!'));
+            else if (validate(password, isUser.password)) {
                 let payload = {
                     empId: isUser.empId,
                     _id: isUser._id,
