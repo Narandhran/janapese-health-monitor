@@ -37,7 +37,7 @@ const medicalReportSchema = new mongoose.Schema({
         required:  true
     },
     bodyTemperature: {
-        type: String,
+        type: Number,
         required:  true
     },
     qa:{

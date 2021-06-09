@@ -35,10 +35,37 @@ module.exports = {
     },
     infectedPeople: async (req, res) => {
         await MedicalReport
-            .find({ qa: { $elemMatch: { 'Infection risk transfer': { $in: [] } } } })
-            .exec((err, data) => {
+            .find({
+                $or: [
+                    { infectionRisk: true },
+                    { bodyTemperature: { $gt: 37 } },
+                    { antigen: 'Positive' },
+                    { 'data.ques': 'Infection risk transfer', 'data.answer': 'no' }
+                ]
+            }).exec((err, data) => {
                 if (err) errorHandler(req, res, err);
                 successHandler(req, res, 'Data listed successfully!', data);
-            })
+            });
+    },
+    listAllReport: async (req, res) => {
+        await MedicalReport.find({}, (err, data) => {
+            if (err) errorHandler(req, res, err);
+            successHandler(req, res, 'Data listed successfully!', data);
+        });
+    },
+    /**
+     * Report screen
+     */
+    filter: async (req, res) => {
+        let { name = '', empId = '', department = '', sDate = '', tDate = '' } = req.body;
+        let filterQuery = {
+            $or: [
+                { name }, { empId }, { department }, { sDate: { $gte: sDate }, tDate: { $lte: tDate } }
+            ]
+        }
+        await MedicalReport.find(filterQuery, (err, data) => {
+            if (err) errorHandler(req, res, err);
+            successHandler(req, res, 'Data listed successfully!', data);
+        });
     }
 };

@@ -23,11 +23,12 @@ securityDefinitions:
     name: Authorization
     in: header
 paths:
+#User (login)
   /user/p/login:
     post:
-      summary: Admin login
+      summary: Admin login (W)
       tags:
-        - User-web
+        - User
       description: Admin login
       consumes: 
         - application/json
@@ -55,9 +56,9 @@ paths:
                 type: string
   /user/p/register:
     post:
-      summary: register
+      summary: Add users (W)
       tags:
-        - User-web
+        - User
       description: Register the user from portal
       consumes: 
         - application/json
@@ -97,9 +98,9 @@ paths:
                 default: 'USER'
   /user/p/dashboard:
     get:
-      summary: View dashboard
+      summary: View dashboard (W)
       tags:
-        - User-web
+        - User
       description: View dashboard
       consumes: 
         - application/json
@@ -118,9 +119,9 @@ paths:
           description: Unauthorized
   /user/p/import_user:
     post:
-      summary: Import users from excel
+      summary: Import users from excel (W)
       tags:
-        - User-web
+        - User
       description: Import users from excel
       consumes: 
         - multipart/form-data
@@ -143,9 +144,9 @@ paths:
           required: true
   /user/m/register:
     post:
-      summary: Initial verification
+      summary: Initial verification (M)
       tags:
-        - User-mobile
+        - User
       description: Initial verification
       consumes: 
         - application/json
@@ -174,9 +175,9 @@ paths:
                 type: string
   /user/m/verify:
     post:
-      summary: OTP verification
+      summary: OTP verification (M)
       tags:
-        - User-mobile
+        - User
       description: OTP verification
       consumes: 
         - application/json
@@ -201,9 +202,9 @@ paths:
                 type: string             
   /user/m/login:
     post:
-      summary: Login
+      summary: Login (M)
       tags:
-        - User-mobile
+        - User
       description: Login
       consumes: 
         - application/json
@@ -230,7 +231,7 @@ paths:
                 type: string
   /user/c/request_otp:
     post:
-      summary: Request OTP
+      summary: Request OTP (W/M)
       tags:
         - User
       description: Request OTP
@@ -257,7 +258,7 @@ paths:
                 type: string
   /user/c/reset_password:
     post:
-      summary: Reset password
+      summary: Reset password (W/M)
       tags:
         - User
       description: Reset password
@@ -288,9 +289,9 @@ paths:
                 type: string
   /qa/c/create:
     post:
-      summary: Create a question
+      summary: Create a question (W)
       tags: 
-        - QA-web
+        - QA
       description: Create a question
       consumes: 
         - application/json
@@ -322,9 +323,9 @@ paths:
                   type: string
   /qa/c/update/{_id}: 
     put:
-      summary: Update questions
+      summary: Update questions (W)
       tags:
-        - QA-web
+        - QA
       description: Update questions
       consumes:
         - application/json
@@ -361,9 +362,9 @@ paths:
           required: true
   /qa/c/view:
     get:
-      summary: View all question and answer
+      summary: View all question and answer (W)
       tags:
-        - QA-web
+        - QA
       description: View all question and answer
       consumes:
         - application/json
@@ -378,9 +379,9 @@ paths:
           description: content not found
   /qa_user/m/create_update:
     post:
-      summary: Create or update QA data
+      summary: Create or update QA data (M)
       tags: 
-        - QA-mobile
+        - QA
       description: Create or update QA data
       consumes: 
         - application/json
@@ -421,9 +422,9 @@ paths:
                       type: string
   /message/p/create:
     post:
-      summary: Create message
+      summary: Create message (W)
       tags: 
-        - Message-web
+        - Message
       description: Create message
       consumes: 
         - application/json
@@ -459,9 +460,9 @@ paths:
                   default: false
   /message/m/view_messages/{empId}:
     put:
-      summary: View messages
+      summary: View messages (M)
       tags:
-        - Message-mobile
+        - Message
       description: View messages
       consumes:
         - application/json
@@ -484,9 +485,9 @@ paths:
           required: true
   /dashboard/m/view/{empId}:
     get:  
-      summary: View dashboard
+      summary: View dashboard (W)
       tags:
-        - Health Management
+        - Dashboard
       description: View dashboard
       consumes: 
         - application/json
@@ -507,7 +508,7 @@ paths:
           required: true
   /report/m/create:
     post:
-      summary: Create data (m)
+      summary: Create data (M)
       tags: 
         - Result data
       description: Create data (m)
@@ -541,7 +542,7 @@ paths:
                 date: 
                   type: string
                 department: 
-                  type: date
+                  type: string
                 infectionLevel: 
                   type: string
                 antigen: 
@@ -550,7 +551,7 @@ paths:
                   type: boolean
                   default: false
                 bodyTemperature: 
-                  type: string
+                  type: number
                 qa:
                   type: array
                   items:
@@ -566,3 +567,77 @@ paths:
                           type: string
                       answer:
                         type: string
+  /report/p/get_infected:
+    get:
+      summary: List infected people (P)
+      tags: 
+        - Result data
+      description: List infected people
+      consumes: 
+        - application/json
+      produces:
+        - application/json
+      security:
+        - bearerAuth: []
+      responses: 
+        '200':
+          description: Success
+        '204':
+          description: Content not found
+        '400':
+          description: Bad request
+  /report/p/list_all:
+    get:
+      summary: List all people (P)
+      tags: 
+        - Result data
+      description: List all people
+      consumes: 
+        - application/json
+      produces:
+        - application/json
+      security:
+        - bearerAuth: []
+      responses: 
+        '200':
+          description: Success
+        '204':
+          description: Content not found
+        '400':
+          description: Bad request
+  /report/p/search_filter:
+    post:
+      summary: Filter - result screen (P)
+      tags: 
+        - Result data
+      description: Filter data
+      consumes: 
+        - application/json
+      produces:
+        - application/json
+      security:
+        - bearerAuth: []
+      responses: 
+        '200':
+          description: Success
+        '204':
+          description: Content not found
+        '400':
+          description: Bad request
+      parameters:
+        - in: body
+          name: create
+          required: true
+          description: ''
+          schema:
+            properties:
+              name:
+                type: string
+              empId:
+                type: string
+              department:
+                type: string
+              sDate:
+                type: string
+              tDate:
+                type: string
