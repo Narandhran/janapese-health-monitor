@@ -6,7 +6,7 @@ module.exports = {
         await QA.create(req.body, (err, data) => {
             if (err) errorHandler(req, res, err);
             else {
-                successHandler(req, res, 'Question created successfully!', {});
+                successHandler(req, res, 'Question created successfully!', { success: true });
             }
         });
     },
@@ -16,7 +16,7 @@ module.exports = {
             .exec((err, data) => {
                 if (err) errorHandler(req, res, err);
                 else {
-                    successHandler(req, res, 'Question updated successfully!', {});
+                    successHandler(req, res, 'Question updated successfully!', { success: true });
                 }
             });
 
@@ -25,7 +25,7 @@ module.exports = {
         await QA.find({}, (err, data) => {
             if (err) errorHandler(req, res, err);
             else {
-                successHandler(req, res, 'Question listed successfully!', {});
+                successHandler(req, res, 'Question listed successfully!', data);
             }
         });
     }
