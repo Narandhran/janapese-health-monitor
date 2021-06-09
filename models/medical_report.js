@@ -18,7 +18,7 @@ const medicalReportSchema = new mongoose.Schema({
     department: {
         type: String,
         lowercase: true,
-        required:  tru
+        required:  true
 
     },
     infectionLevel: {
