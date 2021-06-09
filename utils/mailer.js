@@ -59,7 +59,6 @@ module.exports.sendMail = async (req, res, option, data = {}, fileName) => {
                 ...option,
                 html: template({ ...data, ...templateUtil })
             });
-            // if (isSent) return true;
         }
     } catch (e) {
         errorHandler(req, res, e);

@@ -131,7 +131,7 @@ module.exports = {
      */
     mRegister: async (req, res) => {
         let { email, otp } = req.body;
-        let user = await User.findOneAndUpdate({ email: email });
+        let user = await User.findOne({ email: email });
         let isVerified = verifyOTP(otp, user.verify);
         if (isVerified) {
             user.status = true;

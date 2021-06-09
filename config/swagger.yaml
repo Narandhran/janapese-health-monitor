@@ -505,3 +505,64 @@ paths:
           type: string
           description: ''
           required: true
+  /report/m/create:
+    post:
+      summary: Create data (m)
+      tags: 
+        - Result data
+      description: Create data (m)
+      consumes: 
+        - application/json
+      produces:
+        - application/json
+      security:
+        - bearerAuth: []
+      responses: 
+        '200':
+          description: Success
+        '204':
+          description: Content not found
+        '400':
+          description: Bad request
+      parameters:
+        - in: body
+          name: create
+          required: true
+          description: ''
+          schema: 
+            type: array
+            items:
+              type: object
+              properties:
+                empId:
+                  type: string
+                name: 
+                  type: string
+                date: 
+                  type: string
+                department: 
+                  type: date
+                infectionLevel: 
+                  type: string
+                antigen: 
+                  type: string
+                infectionRisk: 
+                  type: boolean
+                  default: false
+                bodyTemperature: 
+                  type: string
+                qa:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      question:
+                        type: string
+                      type: 
+                        type: string
+                      options: 
+                        type: array
+                        items:
+                          type: string
+                      answer:
+                        type: string

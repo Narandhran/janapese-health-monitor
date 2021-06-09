@@ -4,32 +4,45 @@ var uniqueValidator = require('mongoose-unique-validator');
 const medicalReportSchema = new mongoose.Schema({
     empId: {
         type: String,
-        uppercase: true
+        uppercase: true,
+        required:  true
     },
     name: {
-        type: String
+        type: String,
+        required:  true
     },
     date: {
-        type: String
+        type: Date,
+        required:  true
     },
     department: {
         type: String,
-        lowercase: true
+        lowercase: true,
+        required:  tru
+
     },
     infectionLevel: {
         type: String,
-        enum: ['high', 'low', 'moderate']
+        enum: ['high', 'low', 'moderate'],
+        required:  true
     },
     antigen: {
         type: String,
-        enum: ['Positive', 'Negative']
+        enum: ['Positive', 'Negative'],
+        required:  true
     },
     infectionRisk: {
         type: Boolean,
-        default: false
+        default: false,
+        required:  true
     },
     bodyTemperature: {
-        type: String
+        type: String,
+        required:  true
+    },
+    qa:{
+        type: [{}],
+        default: []
     }
 }, { collection: 'medical_report', timestamps: true });
 

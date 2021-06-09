@@ -22,8 +22,23 @@ module.exports = {
                         user.isInfected = data.infectionRisk;
                         await user.save();
                     }
-                    successHandler(req, res, 'Data updated Successfully!', data);
+                    successHandler(req, res, 'Data updated successfully!', data);
                 }
+            })
+    },
+    addReport: async (req, res) => {
+        await MedicalReport
+            .create(req.body, (err, data) => {
+                if (err) errorHandler(req, res, err);
+                successHandler(req, res, 'Data created successfully!', { success: true });
+            });
+    },
+    infectedPeople: async (req, res) => {
+        await MedicalReport
+            .find({ qa: { $elemMatch: { 'Infection risk transfer': { $in: [] } } } })
+            .exec((err, data) => {
+                if (err) errorHandler(req, res, err);
+                successHandler(req, res, 'Data listed successfully!', data);
             })
     }
 };
