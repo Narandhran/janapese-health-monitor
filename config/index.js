@@ -4,7 +4,7 @@ module.exports.db = {
         password: '',
         host: 'localhost',
         port: '27017',
-        db: 'health_monitor'
+        db: 'employeeapp'
     },
     dev: {
         username: 'appacc',

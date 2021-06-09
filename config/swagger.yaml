@@ -52,8 +52,10 @@ paths:
             properties:
               email:
                 type: string
+                default: "admin@gmail.com"
               password:
                 type: string
+                default: "password"
   /user/p/register:
     post:
       summary: Add users (W)
@@ -315,11 +317,17 @@ paths:
             properties:
               question: 
                 type: string
+              jQuestion: 
+                type: string
               type: 
                 type: string
               options:
                 type: array
                 items: 
+                  type: string
+              jOptions:
+                type: array
+                items:
                   type: string
   /qa/c/update/{_id}: 
     put:
@@ -349,11 +357,17 @@ paths:
             properties:
               question: 
                 type: string
+              jQuestion:
+                type: string
               type: 
                 type: string
               options:
                 type: array
                 items: 
+                  type: string
+              jOptions:
+                type: array
+                items:
                   type: string
         - in: path
           name: _id
@@ -412,13 +426,21 @@ paths:
                   properties:
                     question: 
                       type: string
+                    jQuestion:
+                      type: string
                     type:
                       type: string
                     options:
                       type: array
                       items: 
                         type: string
+                    jOptions:
+                      type: array
+                      items: 
+                        type: string
                     answer:
+                      type: string
+                    jAnswer:
                       type: string
   /message/p/create:
     post:

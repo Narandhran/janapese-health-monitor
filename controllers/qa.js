@@ -1,4 +1,5 @@
 const QA = require("../models/qa")
+const { errorHandler, successHandler } = require('../utils/handler');
 
 module.exports = {
     create: async (req, res) => {

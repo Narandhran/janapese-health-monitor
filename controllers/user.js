@@ -78,9 +78,11 @@ module.exports = {
      */
     login: async (req, res) => {
         let { email, password } = req.body;
-        let isUser = await User.findOne({ email }).lean();
+        console.log('email: ' + email + " password: " + password);
+        let isUser = await User.findOne({ email: email }).lean();
+        console.log(isUser);
         if (isUser) {
-            if(validate(password, isUser.password)){
+            if (validate(password, isUser.password)) {
                 let payload = {
                     empId: isUser.empId,
                     _id: isUser._id,
@@ -89,7 +91,7 @@ module.exports = {
                 };
                 successHandler(req, res, 'Login success', sign(payload));
             }
-            else errorHandler(req,res,new Error('Incorrect password, try again!'))
+            else errorHandler(req, res, new Error('Incorrect password, try again!'))
         } else errorHandler(req, res, new Error('User not exist!!'));
     },
     /**

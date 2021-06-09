@@ -5,17 +5,23 @@ const qaSchema = new mongoose.Schema({
     question: {
         type: String,
         lowercase: true,
-        required: true
+        unique: true
+    },
+    jQuestion: {
+        type: String
     },
     type: {
         type: String,
-        enum: ['radio','checkbox','text','dropdown'],
+        enum: ['radio', 'checkbox', 'text', 'dropdown'],
         lowercase: true
     },
     options: {
         type: [String],
-        default: [],
-        required: true
+        default: []
+    },
+    jOptions: {
+        type: [String],
+        default: []
     },
     status: {
         type: Boolean,
