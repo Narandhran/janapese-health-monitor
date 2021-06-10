@@ -78,9 +78,7 @@ module.exports = {
      */
     login: async (req, res) => {
         let { email, password } = req.body;
-        console.log('email: ' + email + " password: " + password);
-        let isUser = await User.findOne({ email: email }).lean();
-        console.log(isUser);
+        let isUser = await User.findOne({ email: email }, 'name email uuid empId role gender dp mobile department shedule').lean();
         if (isUser) {
             if (validate(password, isUser.password)) {
                 let payload = {
@@ -89,7 +87,7 @@ module.exports = {
                     role: isUser.role,
                     access: isUser.role.toLowerCase() == 'admin' ? isUser.access : ['none']
                 };
-                successHandler(req, res, 'Login success', sign(payload));
+                successHandler(req, res, 'Login success', { token: sign(payload), userData: isUser });
             }
             else errorHandler(req, res, new Error('Incorrect password, try again!'))
         } else errorHandler(req, res, new Error('User not exist!!'));

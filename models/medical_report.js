@@ -23,7 +23,7 @@ const medicalReportSchema = new mongoose.Schema({
     },
     infectionLevel: {
         type: String,
-        enum: ['high', 'low', 'moderate'],
+        enum: ['High', 'Low', 'Moderate'],
         required:  true
     },
     antigen: {

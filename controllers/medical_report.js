@@ -60,7 +60,7 @@ module.exports = {
         let { name = '', empId = '', department = '', sDate = '', tDate = '' } = req.body;
         let filterQuery = {
             $or: [
-                { name }, { empId }, { department }, { sDate: { $gte: sDate }, tDate: { $lte: tDate } }
+                { name }, { empId }, { department }, { date: { $gte: new Date(sDate).setHours(0, 0, 0, 0) }, date: { $lte: new Date(tDate).setHours(0, 0, 0, 0) } }
             ]
         }
         await MedicalReport.find(filterQuery, (err, data) => {

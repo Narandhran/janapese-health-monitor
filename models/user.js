@@ -52,7 +52,7 @@ const userSchema = new mongoose.Schema({
     },
     fcmToken: { type: String },
     countryCode: { type: String, minlength: 2, maxlength: 3 },
-    mobile: { type: String, unique: true },
+    mobile: { type: String },
     verify: {
         otp: { type: Number },
         expire: { type: Date }
