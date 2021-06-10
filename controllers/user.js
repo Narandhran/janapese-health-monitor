@@ -78,7 +78,7 @@ module.exports = {
      */
     login: async (req, res) => {
         let { email, password } = req.body;
-        let isUser = await User.findOne({ email: email }, 'name email uuid empId role gender dp mobile department shedule').lean();
+        let isUser = await User.findOne({ email }).lean();
         if (isUser) {
             if (validate(password, isUser.password)) {
                 let payload = {
@@ -87,7 +87,17 @@ module.exports = {
                     role: isUser.role,
                     access: isUser.role.toLowerCase() == 'admin' ? isUser.access : ['none']
                 };
-                successHandler(req, res, 'Login success', { token: sign(payload), userData: isUser });
+                successHandler(req, res, 'Login success', {
+                    token: sign(payload),
+                    name: isUser.name,
+                    email: isUser.email,
+                    uuid: isUser.uuid,
+                    department: isUser.department,
+                    registrationDate: isUser.registrationDate,
+                    schedule: isUser.schedule,
+                    gender: isUser.gender,
+                    role: isUser.role
+                });
             }
             else errorHandler(req, res, new Error('Incorrect password, try again!'))
         } else errorHandler(req, res, new Error('User not exist!!'));
@@ -155,7 +165,17 @@ module.exports = {
                     role: isUser.role,
                     access: isUser.role.toLowerCase() == 'admin' ? isUser.access : ['none']
                 };
-                successHandler(req, res, 'Login success', { uuid: isUser.uuid, token: sign(payload) });
+                successHandler(req, res, 'Login success', {
+                    token: sign(payload),
+                    name: isUser.name,
+                    email: isUser.email,
+                    uuid: isUser.uuid,
+                    department: isUser.department,
+                    registrationDate: isUser.registrationDate,
+                    schedule: isUser.schedule,
+                    gender: isUser.gender,
+                    role: isUser.role
+                });
             } else errorHandler(req, res, new Error('Incorrect password, try again!'));
         } else errorHandler(req, res, new Error('User not exist!!'));
     },
