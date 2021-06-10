@@ -154,11 +154,15 @@ module.exports = {
      * Mobile login
      */
     mLogin: async (req, res) => {
-        let { email, password } = req.body;
+        let { fcmToken = null, email, password } = req.body;
         let isUser = await User.findOne({ email }).lean();
         if (isUser) {
             if (!isUser.status) errorHandler(req, res, new Error('Email not verified yet!!'));
             else if (validate(password, isUser.password)) {
+                if (fcmToken) {
+                    isUser.fcmToken = fcmToken;
+                    await isUser.save();
+                }
                 let payload = {
                     empId: isUser.empId,
                     _id: isUser._id,
