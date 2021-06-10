@@ -13,7 +13,7 @@ module.exports = {
                 if (err) errorHandler(req, res, err);
                 else {
                     //FCM logic here
-                    successHandler(req, res, 'Message send successfully!', {});
+                    successHandler(req, res, 'Message send successfully!', { success: true });
                 }
             });
     },
@@ -25,7 +25,7 @@ module.exports = {
                 if (err) errorHandler(req, res, err);
                 else {
                     await Message.updateMany({ empId: req.params.empId }, { isRead: true });
-                    successHandler(req, res, 'Viewing messages', {});
+                    successHandler(req, res, 'Viewing messages', data);
                 }
             })
     }
