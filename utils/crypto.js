@@ -1,4 +1,4 @@
-const { hashSync, compareSync } = require('bcrypt');
+const { hashSync, compareSync } = require('bcrypt-nodejs');
 
 /*
  * Custom
