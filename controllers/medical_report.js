@@ -79,5 +79,14 @@ module.exports = {
                     else errorHandler(req, res, new Error('You\'ve not input your data yet'));
                 }
             });
+    },
+    getHistoryByUser: async (req, res) => {
+        await MedicalReport
+            .find({ empId: req.params.empId }).sort({ createdAt: 1 })
+            .exec((err, data) => {
+                if (err) errorHandler(req, res, err);
+                else
+                    successHandler(req, res, 'Data listed successfully!', data);
+            });
     }
 };

@@ -13,4 +13,5 @@ module.exports = app => {
      */
     app.post('/report/m/create', authenticate, authorize(['ADMIN', 'USER']), medicalReportControl.addReport);
     app.get('/report/m/view_data/:empId', authenticate, authorize(['ADMIN', 'USER']), medicalReportControl.getByUser);
+    app.get('/report/m/view_history/:empId', authenticate, authorize(['ADMIN', 'USER']), medicalReportControl.getHistoryByUser);
 };

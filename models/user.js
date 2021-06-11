@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { hashSync, genSaltSync } = require('bcrypt-nodejs');
+const { hashSync, genSaltSync } = require('bcrypt');
 var uniqueValidator = require('mongoose-unique-validator');
 
 const userSchema = new mongoose.Schema({

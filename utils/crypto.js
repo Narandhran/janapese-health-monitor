@@ -1,4 +1,4 @@
-const { hashSync, compareSync } = require('bcrypt-nodejs');
+const { hashSync, compareSync } = require('bcrypt');
 
 /*
  * Custom
@@ -10,6 +10,7 @@ module.exports = {
         return hashSync(plainText, 10);
     },
     validate: (plainText, hashText) => {
+        console.log(`${plainText} and ${hashText}`);
         if (compareSync(plainText, hashText))
             return true;
         else
