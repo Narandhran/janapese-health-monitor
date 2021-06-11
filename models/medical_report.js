@@ -21,21 +21,21 @@ const medicalReportSchema = new mongoose.Schema({
         required:  true
 
     },
-    infectionLevel: {
-        type: String,
-        enum: ['High', 'Low', 'Moderate'],
-        required:  true
-    },
+    // infectionLevel: {
+    //     type: String,
+    //     enum: ['High', 'Low', 'Moderate'],
+    //     required:  true
+    // },
     antigen: {
         type: String,
         enum: ['Positive', 'Negative'],
         required:  true
     },
-    infectionRisk: {
-        type: Boolean,
-        default: false,
-        required:  true
-    },
+    // infectionRisk: {
+    //     type: Boolean,
+    //     default: false,
+    //     required:  true
+    // },
     bodyTemperature: {
         type: Number,
         required:  true

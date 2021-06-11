@@ -1,5 +1,6 @@
 const QA = require("../models/qa")
 const { errorHandler, successHandler } = require('../utils/handler');
+const logger = require('../utils/logger');
 
 module.exports = {
     create: async (req, res) => {
@@ -28,5 +29,8 @@ module.exports = {
                 successHandler(req, res, 'Question listed successfully!', data);
             }
         });
-    }
+    },
+    // test: async (req, res) => {
+    //     logger.error(req)
+    // }
 }

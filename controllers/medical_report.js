@@ -30,7 +30,7 @@ module.exports = {
         await MedicalReport
             .create(req.body, (err, data) => {
                 if (err) errorHandler(req, res, err);
-                successHandler(req, res, 'Data created successfully!', { success: true });
+                else successHandler(req, res, 'Data created successfully!', { success: true });
             });
     },
     infectedPeople: async (req, res) => {
@@ -44,13 +44,13 @@ module.exports = {
                 ]
             }).exec((err, data) => {
                 if (err) errorHandler(req, res, err);
-                successHandler(req, res, 'Data listed successfully!', data);
+                else successHandler(req, res, 'Data listed successfully!', data);
             });
     },
     listAllReport: async (req, res) => {
         await MedicalReport.find({}, (err, data) => {
             if (err) errorHandler(req, res, err);
-            successHandler(req, res, 'Data listed successfully!', data);
+            else successHandler(req, res, 'Data listed successfully!', data);
         });
     },
     /**
@@ -65,7 +65,19 @@ module.exports = {
         }
         await MedicalReport.find(filterQuery, (err, data) => {
             if (err) errorHandler(req, res, err);
-            successHandler(req, res, 'Data listed successfully!', data);
+            else successHandler(req, res, 'Data listed successfully!', data);
         });
+    },
+    getByUser: async (req, res) => {
+        await MedicalReport
+            .find({ empId: req.params.empId }).sort({ createdAt: 1 })
+            .exec((err, data) => {
+                if (err) errorHandler(req, res, err);
+                else {
+                    if (data && data.length > 0)
+                        successHandler(req, res, 'Data listed successfully!', data[0]);
+                    else errorHandler(req, res, new Error('You\'ve not input your data yet'));
+                }
+            });
     }
 };

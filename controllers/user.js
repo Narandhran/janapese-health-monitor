@@ -172,6 +172,7 @@ module.exports = {
                 successHandler(req, res, 'Login success', {
                     token: sign(payload),
                     name: isUser.name,
+                    empId: isUser.empId,
                     email: isUser.email,
                     uuid: isUser.uuid,
                     department: isUser.department,

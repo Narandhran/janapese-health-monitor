@@ -8,5 +8,5 @@ module.exports = app => {
     /**
      * Mobile routes
      */
-    app.put('/message/m/view_messages/:empId', authenticate, authorize(['ADMIN', 'USER']), messageControl.viewMessages);
+    app.get('/message/m/view_messages/:empId', authenticate, authorize(['ADMIN', 'USER']), messageControl.viewMessages);
 };

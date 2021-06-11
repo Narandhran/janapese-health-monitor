@@ -12,4 +12,5 @@ module.exports = app => {
      * Mobile routes
      */
     app.post('/report/m/create', authenticate, authorize(['ADMIN', 'USER']), medicalReportControl.addReport);
+    app.get('/report/m/view_data/:empId', authenticate, authorize(['ADMIN', 'USER']), medicalReportControl.getByUser);
 };

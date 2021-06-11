@@ -75,7 +75,8 @@ const userSchema = new mongoose.Schema({
         default: false
     },
     schedule: {
-        type: [String]
+        type: String,
+        default: '1, 3, 5'
     },
     status: {
         type: Boolean,
