@@ -50,7 +50,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         set: encrypt
     },
-    fcmToken: { type: String },
+    fcmToken: { type: String, default: ''},
     countryCode: { type: String, minlength: 2, maxlength: 3 },
     mobile: { type: String },
     verify: {

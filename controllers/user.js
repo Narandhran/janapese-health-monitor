@@ -168,7 +168,7 @@ module.exports = {
                     empId: isUser.empId,
                     _id: isUser._id,
                     role: isUser.role,
-                    access: isUser.role.toLowerCase() == 'admin' ? isUser.access : ['none']
+                    access: isUser.role.toLowerCase() == 'admin' ? isUser.access : []
                 };
                 successHandler(req, res, 'Login success', {
                     token: sign(payload),

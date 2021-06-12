@@ -7,7 +7,7 @@ const logger = require('../utils/logger');
  * Send Push notification on every monday, wednesday and friday
  */
 
-module.exports.sendFCMremainder = SCHEDULE.scheduleJob('28 10 * * *', async function () {
+module.exports.sendFCMremainder = SCHEDULE.scheduleJob('30 6 * * 1,3,5', async function () {
     await User.find({ isReportSubmitted: false }, 'fcmToken').exec((err, data) => {
         if (err) logger.error(`${err.status || 400} - ${e.message}`);
         else {

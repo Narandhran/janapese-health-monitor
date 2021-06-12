@@ -24,8 +24,11 @@ module.exports = {
                     }
                     successHandler(req, res, 'Data updated successfully!', data);
                 }
-            })
+            });
     },
+    /**
+     * Mobile add data on every day
+     */
     addReport: async (req, res) => {
         await MedicalReport
             .create(req.body, (err, data) => {
@@ -33,22 +36,101 @@ module.exports = {
                 else successHandler(req, res, 'Data created successfully!', { success: true });
             });
     },
+    /**
+     * Web View infected people 
+     */
     infectedPeople: async (req, res) => {
-        await MedicalReport
-            .find({
-                $or: [
-                    { infectionRisk: true },
-                    { bodyTemperature: { $gt: 37 } },
-                    { antigen: 'Positive' },
-                    { 'data.ques': 'Infection risk transfer', 'data.answer': 'no' }
-                ]
-            }).exec((err, data) => {
-                if (err) errorHandler(req, res, err);
-                else successHandler(req, res, 'Data listed successfully!', data);
-            });
+        let matchQuery = {
+            $or: [
+                { bodyTemperature: { $gt: 37 } },
+                { antigen: 'Positive' },
+                { 'data.ques': 'Infection risk transfer', 'data.answer': 'no' }
+            ]
+        };
+        let department = req.verifiedToken.access;
+        if (department.length > 0 && department[0] != 'ALL')
+            matchQuery.department = { $in: department };
+        await MedicalReport.aggregate([
+            {
+                $match: matchQuery
+            },
+            {
+                $sort: { empId: -1, createdAt: -1 }
+            },
+            {
+                $group: {
+                    _id: '$empId',
+                    name: { $first: '$name' },
+                    date: { $last: '$date' },
+                    department: { $first: '$department' },
+                    antigen: { $first: '$antigen' },
+                    bodyTemperature: { $first: '$bodyTemperature' },
+                    qa: { $first: '$qa' }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    empId: '$_id',
+                    name: 1,
+                    date: 1,
+                    department: 1,
+                    antigen: 1,
+                    bodyTemperature: 1,
+                    qa: 1
+                }
+            },
+            {
+                $sort: { date: -1 }
+            }
+        ]).exec((err, data) => {
+            if (err) errorHandler(req, res, err);
+            else successHandler(req, res, 'Data listed successfully!', data);
+        });
     },
+    /**
+     * Web view all 
+     */
     listAllReport: async (req, res) => {
-        await MedicalReport.find({}, (err, data) => {
+        let matchQuery = {};
+        let department = req.verifiedToken.access;
+        if (department.length > 0 && department[0] != 'ALL')
+            matchQuery = { department: { $in: department } }
+
+        await MedicalReport.aggregate([
+            {
+                $match: matchQuery
+            },
+            {
+                $sort: { empId: -1, createdAt: -1 }
+            },
+            {
+                $group: {
+                    _id: '$empId',
+                    name: { $first: '$name' },
+                    date: { $last: '$date' },
+                    department: { $first: '$department' },
+                    antigen: { $first: '$antigen' },
+                    bodyTemperature: { $first: '$bodyTemperature' },
+                    qa: { $first: '$qa' }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    empId: '$_id',
+                    name: 1,
+                    date: 1,
+                    department: 1,
+                    antigen: 1,
+                    bodyTemperature: 1,
+                    qa: 1
+                }
+            },
+            {
+                $sort: { date: -1 }
+            }
+        ]).exec((err, data) => {
             if (err) errorHandler(req, res, err);
             else successHandler(req, res, 'Data listed successfully!', data);
         });
@@ -63,14 +145,18 @@ module.exports = {
                 { name }, { empId }, { department }, { date: { $gte: new Date(sDate).setHours(0, 0, 0, 0) }, date: { $lte: new Date(tDate).setHours(0, 0, 0, 0) } }
             ]
         }
-        await MedicalReport.find(filterQuery, (err, data) => {
-            if (err) errorHandler(req, res, err);
-            else successHandler(req, res, 'Data listed successfully!', data);
-        });
+        await MedicalReport
+            .find(filterQuery)
+            .sort({ createdAt: -1 })
+            .exec((err, data) => {
+                if (err) errorHandler(req, res, err);
+                else successHandler(req, res, 'Data listed successfully!', data);
+            });
     },
     getByUser: async (req, res) => {
         await MedicalReport
-            .find({ empId: req.params.empId }).sort({ createdAt: 1 })
+            .find({ empId: req.params.empId })
+            .sort({ createdAt: -1 })
             .exec((err, data) => {
                 if (err) errorHandler(req, res, err);
                 else {
@@ -82,7 +168,8 @@ module.exports = {
     },
     getHistoryByUser: async (req, res) => {
         await MedicalReport
-            .find({ empId: req.params.empId }).sort({ createdAt: 1 })
+            .find({ empId: req.params.empId })
+            .sort({ createdAt: -1 })
             .exec((err, data) => {
                 if (err) errorHandler(req, res, err);
                 else

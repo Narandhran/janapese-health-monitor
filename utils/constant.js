@@ -23,7 +23,8 @@ module.exports.verifyOTP = (inputOTP, verifyObject) => {
     else return false;
 }
 module.exports.FCM_CONSTANT = {
-    server_key: 'AAAABihWQgk:APA91bGFAm6yTXG-5xwKw0j2bzPUnlG0LS4q8d6uPYmYxG3wgApSwgRLhFHfVeakWlXk9iRn-NDm5E97L0JGy27sAM0IKpXVAepKtNRk8of9qEenmoMfRtBFquvrwtoNP3pm8BIGDHD6'
+    server_key: 'AAAABihWQgk:APA91bGFAm6yTXG-5xwKw0j2bzPUnlG0LS4q8d6uPYmYxG3wgApSwgRLhFHfVeakWlXk9iRn-NDm5E97L0JGy27sAM0IKpXVAepKtNRk8of9qEenmoMfRtBFquvrwtoNP3pm8BIGDHD6',
+    alert_medical_report: '/topics/alert_medical_report'
 }
 module.exports.mail = {
     host: 'smtp.gmail.com',

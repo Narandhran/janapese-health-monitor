@@ -605,10 +605,10 @@ paths:
           required: true
   /report/m/view_history/{empId}:
     get:  
-      summary: View report data by employee(M)
+      summary: View report history by employee(M)
       tags:
         - Result data
-      description: View report data (M)
+      description: View report history
       consumes: 
         - application/json
       produces: 

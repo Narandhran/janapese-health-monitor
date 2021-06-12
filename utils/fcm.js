@@ -3,7 +3,7 @@ var FCM = require('fcm-push');
 
 var FCM = new FCM(FCM_CONSTANT.server_key);
 module.exports = {
-    loadFcmMessage: async (target, title, body, data) => {
+    loadFcmMessage: (target, title, body, data) => {
         return {
             registration_ids: target,
             // collapse_key: 'your_collapse_key',
@@ -18,7 +18,7 @@ module.exports = {
         };
     },
 
-    loadFcmTopics: async (target, title, body, rrData) => {
+    loadFcmTopics: (target, title, body, rrData) => {
         return {
             to: target,
             // collapse_key: 'your_collapse_key',
@@ -35,9 +35,9 @@ module.exports = {
         };
     },
 
-    sendFcmMessagePromise: async (message) => {
-        // console.log(JSON.stringify(message));
-        return await FCM.send(message);
+    sendFcmMessagePromise: (message) => {
+        console.log(JSON.stringify(message));
+        return FCM.send(message);
     },
 
     sendFcmMessageCb: async (message, cb) => {
