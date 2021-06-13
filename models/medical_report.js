@@ -28,7 +28,7 @@ const medicalReportSchema = new mongoose.Schema({
     // },
     antigen: {
         type: String,
-        enum: ['Positive', 'Negative'],
+        enum: ['Positive', 'Negative','Not detected'],
         required:  true
     },
     // infectionRisk: {
