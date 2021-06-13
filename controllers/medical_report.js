@@ -22,7 +22,7 @@ module.exports = {
                         user.isInfected = data.infectionRisk;
                         await user.save();
                     }
-                    successHandler(req, res, 'Data updated successfully!', data);
+                    successHandler(req, res, 'Data updated successfully', data);
                 }
             });
     },
@@ -33,7 +33,7 @@ module.exports = {
         await MedicalReport
             .create(req.body, (err, data) => {
                 if (err) errorHandler(req, res, err);
-                else successHandler(req, res, 'Data created successfully!', { success: true });
+                else successHandler(req, res, 'Data created successfully', { success: true });
             });
     },
     /**
@@ -85,7 +85,7 @@ module.exports = {
             }
         ]).exec((err, data) => {
             if (err) errorHandler(req, res, err);
-            else successHandler(req, res, 'Data listed successfully!', data);
+            else successHandler(req, res, 'Data listed successfully', data);
         });
     },
     /**
@@ -132,7 +132,7 @@ module.exports = {
             }
         ]).exec((err, data) => {
             if (err) errorHandler(req, res, err);
-            else successHandler(req, res, 'Data listed successfully!', data);
+            else successHandler(req, res, 'Data listed successfully', data);
         });
     },
     /**
@@ -150,7 +150,7 @@ module.exports = {
             .sort({ createdAt: -1 })
             .exec((err, data) => {
                 if (err) errorHandler(req, res, err);
-                else successHandler(req, res, 'Data listed successfully!', data);
+                else successHandler(req, res, 'Data listed successfully', data);
             });
     },
     getByUser: async (req, res) => {
@@ -173,7 +173,7 @@ module.exports = {
             .exec((err, data) => {
                 if (err) errorHandler(req, res, err);
                 else
-                    successHandler(req, res, 'Data listed successfully!', data);
+                    successHandler(req, res, 'Data listed successfully', data);
             });
     }
 };

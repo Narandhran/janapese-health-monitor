@@ -34,8 +34,8 @@ module.exports.mail = {
     type: 'OAuth2',
     redirectUrl: 'https://developers.google.com/oauthplayground',
     user: 'virtualacc2021@gmail.com',
-    clientId: '232047250421-9tsc6k1u2oh3h7c94jm12fg6lv4gso5m.apps.googleusercontent.com',
-    clientSecret: 'gphftms6OlN8YH-nXQDG0WPP',
+    clientId: '232047250421-1dnki2s8hjdumk2lnrhoj216e3u8m9ii.apps.googleusercontent.com',
+    clientSecret: 'xQ7ONFdUR54E_QgKcpTt4yzn',
     refreshToken: '1//0424IqSkGIQB3CgYIARAAGAQSNwF-L9Irh2cPZp7VdOu31dAJA5UD3d9Nb8_2NpP-8xVJbyU4h6EgeovJrbGi9i2rSo-woqvYFLY',
     accessToken: 'ya29.a0AfH6SMByuIhKYZqinP3cXJ3l-U5DVoM_8KL8G-h5ukLSTN09xNmuBiRvOZlchsgCVbRrl-Q9r1MPYV9yKt8KIb1Y0TfaY4mpUv1swJOz27P4zfZ70l3Q1SvJiGew1shIdxqZRKGQrunMscacB0LsFTF9cpFd',
 }

@@ -50,11 +50,11 @@ module.exports = {
                         e.role = e.role ? (e.role).toUpperCase() : 'USER';
                         e.email = (e.email).toLowerCase();
                     });
-                    if (dataError) errorHandler(req, res, new Error('Employee number and Email should\'t be empty, check the excel sheet properly.'));
+                    if (dataError) errorHandler(req, res, new Error('Employee number and Email should\'t be empty, check the excel sheet properly'));
                     else {
                         await User.insertMany(users, (err, data) => {
                             if (err) errorHandler(req, res, err);
-                            successHandler(req, res, 'Users imported successfully!', {});
+                            successHandler(req, res, 'Data imported successfully', {});
                         });
                     }
                 }
@@ -99,8 +99,8 @@ module.exports = {
                     role: isUser.role
                 });
             }
-            else errorHandler(req, res, new Error('Incorrect password, try again!'))
-        } else errorHandler(req, res, new Error('User not exist!!'));
+            else errorHandler(req, res, new Error('Incorrect password, try again'))
+        } else errorHandler(req, res, new Error('User does not exist'));
     },
     /**
      * Web dashboard
@@ -133,7 +133,7 @@ module.exports = {
         userObj.uuid = GENERATOR.generateUUID(userObj.empId);
         await User.create(userObj, (err, data) => {
             if (err) errorHandler(req, res, err);
-            else successHandler(req, res, 'User added successfully!!', { success: true });
+            else successHandler(req, res, 'Data added successfully', { success: true });
         })
     },
     /**
@@ -148,7 +148,7 @@ module.exports = {
             await user.save();
             successHandler(req, res, 'Success', { verified: true });
         }
-        else errorHandler(req, res, new Error('Invalid OTP, try again!'));
+        else errorHandler(req, res, new Error('Invalid OTP, try again'));
     },
     /**
      * Mobile login
@@ -157,7 +157,7 @@ module.exports = {
         let { fcmToken = '', email, password } = req.body;
         let isUser = await User.findOne({ email });
         if (isUser) {
-            if (!isUser.status) errorHandler(req, res, new Error('Email not verified yet!!'));
+            if (!isUser.status) errorHandler(req, res, new Error('Email not verified yet'));
 
             else if (validate(password, isUser.password)) {
                 if (fcmToken) {
@@ -190,7 +190,7 @@ module.exports = {
      */
     requestOTP: async (req, res) => {
         let isUser = await User.findOne({ email: req.body.email });
-        if (!isUser) errorHandler(req, res, new Error('User is not exist, kindly ask admin!!'));
+        if (!isUser) errorHandler(req, res, new Error('User is not exist, kindly ask admin'));
         else {
             let otp = GENERATOR.generateOTP();
             sendMail(req, res,
@@ -221,7 +221,7 @@ module.exports = {
         else if (verifyOTP(otp, isUser.verify)) {
             isUser.password = password;
             await isUser.save();
-            successHandler(req, res, 'Password updated successfully!', { success: true });
+            successHandler(req, res, 'Password updated successfully', { success: true });
         }
         else errorHandler(req, res, new Error('Invalid OTP, try again!'));
     },

@@ -23,13 +23,16 @@ const templateUtil = {
     adminMail: 'admin@orgware.com',
 };
 
-const myOAuth2Client = new OAuth2(mail.clientId, mail.clientSecret)
+const oauth2Client = new OAuth2(
+    mail.clientId,
+    mail.clientSecret,
+    "https://developers.google.com/oauthplayground"
+);
 
-myOAuth2Client.setCredentials({
-    refresh_token: mail.refreshToken
+oauth2Client.setCredentials({
+    refresh_token: "1//04ITAIug675juCgYIARAAGAQSNwF-L9Irn61SD8lv_r9PoA_LhMxfsoGXmQNkWadp1xRHyIRZnwWCviXhy8S5HvAdSxY-fVR5cIQ"
 });
-
-const myAccessToken = myOAuth2Client.getAccessToken()
+const accessToken = oauth2Client.getAccessToken()
 
 var transporter = createTransport({
     host: mail.host,
@@ -42,7 +45,10 @@ var transporter = createTransport({
         clientId: mail.clientId,
         clientSecret: mail.clientSecret,
         refreshToken: mail.refreshToken,
-        accessToken: myAccessToken
+        accessToken: accessToken,
+        tls: {
+            rejectUnauthorized: false
+        }
     }
 });
 transporter.use('compile', inlineCss());

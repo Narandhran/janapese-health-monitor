@@ -12,7 +12,7 @@ module.exports = {
             .findByIdAndUpdate(req.params._id, { closedContactSetting: req.body })
             .exec((err, data) => {
                 if (err) errorHandler(req, res, err);
-                successHandler(req, res, 'Data updated successfully!', { success: true });
+                successHandler(req, res, 'Data updated successfully', { success: true });
             })
     },
     showClosedContactSetting: async (req, res) => {
@@ -20,7 +20,7 @@ module.exports = {
             .find({}, 'distance timeDuration')
             .exec((err, data) => {
                 if (err) errorHandler(req, res, err);
-                successHandler(req, res, 'Data listed successfully!', { success: true });
+                successHandler(req, res, 'Data listed successfully', { success: true });
             })
     },
     updateFCMRemainderValue: async (req, res) => {
