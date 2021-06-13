@@ -8,6 +8,7 @@ const User = require('../models/user');
 const { toJapanese } = require('../utils/constant');
 const { errorHandler, successHandler } = require('../utils/handler');
 const moment = require('moment');
+const { loadMulterS3 } = require('../utils/multers3');
 
 module.exports = {
     /**
@@ -15,7 +16,7 @@ module.exports = {
      */
     editReport: async (req, res) => {
         await MedicalReport
-            .findByIdAndUpdate(req.params._id, request.body, { new: true })
+            .findByIdAndUpdate(req.params._id, req.body, { new: true })
             .exec(async (err, data) => {
                 if (err) errorHandler(req, res, err);
                 else {
@@ -184,5 +185,25 @@ module.exports = {
                 else
                     successHandler(req, res, toJapanese['Data listed successfully'], data);
             });
+    },
+    uploadTemperatureImg: async (req, res) => {
+        let upload = loadMulterS3(3, 'temperature').single('temperature');
+        await upload(req, null, (err) => {
+            if (err)
+                errorHandler(req, res, err);
+            else {
+                successHandler(req, res, toJapanese.Success, req.file.location);
+            }
+        });
+    },
+    uploadAntigenImg: async (req, res) => {
+        let upload = loadMulterS3(3, 'antigen').single('antigen');
+        await upload(req, null, (err) => {
+            if (err)
+                errorHandler(req, res, err);
+            else {
+                successHandler(req, res, toJapanese.Success, req.file.location);
+            }
+        });
     }
 };

@@ -39,6 +39,12 @@ module.exports.mail = {
     refreshToken: '1//0424IqSkGIQB3CgYIARAAGAQSNwF-L9Irh2cPZp7VdOu31dAJA5UD3d9Nb8_2NpP-8xVJbyU4h6EgeovJrbGi9i2rSo-woqvYFLY',
     accessToken: 'ya29.a0AfH6SMByuIhKYZqinP3cXJ3l-U5DVoM_8KL8G-h5ukLSTN09xNmuBiRvOZlchsgCVbRrl-Q9r1MPYV9yKt8KIb1Y0TfaY4mpUv1swJOz27P4zfZ70l3Q1SvJiGew1shIdxqZRKGQrunMscacB0LsFTF9cpFd',
 }
+module.exports.cloud = {
+    secretAccessKey: 'icmaRcoX1e89S5mPQPzxH8UsT10rIUillJoCtBUN',
+    accessKeyId: 'AKIAVD2QJDWG7OYJVJ4L',
+    region: 'ap-south-1',
+    basePath: 'https://projectorg.s3.ap-south-1.amazonaws.com/'
+}
 module.exports.toJapanese = {
     "Success": "完了",
     "Data not found": "データが見つかりませんでした",
