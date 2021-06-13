@@ -12,7 +12,7 @@ module.exports.initAdmin = {
     "role": "Admin",
     "gender": "male",
     "email": "admin@gmail.com",
-    "schedule": ["monday", "wednesday", "friday"],
+    "schedule": '1,3,5',
     "mobile": "0000000000",
     "password": "password",
     "status": true
