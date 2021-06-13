@@ -8,6 +8,10 @@ const Message = require('../models/message');
 const User = require('../models/user');
 const { toJapanese } = require('../utils/constant');
 const MedicalReport = require('../models/medical_report');
+const json2xls = require('json2xls');
+const fs = require('fs');
+const path = require('path');
+
 module.exports = {
     mHealthManagement: async (req, res) => {
         let { empId } = req.params;
@@ -26,4 +30,16 @@ module.exports = {
             else errorHandler(req, res, new Error(toJapanese['Data not found']));
         })
     },
+    exportToExcel: async (req, res) => {
+        let { data } = req.body;
+        try {
+            let xls = json2xls(data);
+            filePath = path.resolve('public/others');
+            fileName = 'data.xlsx';
+            fs.writeFileSync(filePath + '/' + fileName, xls, 'binary');
+            res.sendFile(fileName, { root: filePath });
+        } catch (error) {
+            errorHandler(req, res, error);
+        }
+    }
 }
