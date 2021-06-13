@@ -6,6 +6,7 @@
 const { errorHandler, successHandler } = require('../utils/handler');
 const Message = require('../models/message');
 const User = require('../models/user');
+const { toJapanese } = require('../utils/constant');
 const MedicalReport = require('../models/medical_report');
 module.exports = {
     mHealthManagement: async (req, res) => {
@@ -21,8 +22,8 @@ module.exports = {
                 profileInfo: data[1] || {},
                 medicalInfo: data[2] || {}
             }
-            if (data && data.lenght > 0) successHandler(req, res, 'Success', persisted);
-            else errorHandler(req, res, new Error('Data not found'));
+            if (data && data.lenght > 0) successHandler(req, res, toJapanese['Success'], persisted);
+            else errorHandler(req, res, new Error(toJapanese['Data not found']));
         })
     },
 }

@@ -7,7 +7,7 @@ const Message = require('../models/message');
 const User = require('../models/user');
 const { loadFcmMessage, loadFcmTopics, sendFcmMessagePromise } = require('../utils/fcm');
 const { errorHandler, successHandler } = require('../utils/handler');
-const { FCM_CONSTANT } = require('../utils/constant');
+const { FCM_CONSTANT, topicMessage,toJapanese } = require('../utils/constant');
 module.exports = {
     insertMessages: async (req, res) => {
         await Message
@@ -28,7 +28,7 @@ module.exports = {
                             );
                             sendFcmMessagePromise(topicMessage)
                                 .then(() => {
-                                    successHandler(req, res, 'Message(s) has been sent', { success: true });
+                                    successHandler(req, res, toJapanese['Message(s) has been sent'], { success: true });
                                 })
                                 .catch(e => errorHandler(req, res, e));
                         }
@@ -46,7 +46,7 @@ module.exports = {
                                         );
                                         sendFcmMessagePromise(message)
                                             .then(() => {
-                                                successHandler(req, res, 'Message(s) has been sent', { success: true });
+                                                successHandler(req, res, toJapanese['Message(s) has been sent'], { success: true });
                                             })
                                             .catch(e => errorHandler(req, res, e));
                                     }
@@ -54,7 +54,7 @@ module.exports = {
                         }
 
                     }
-                    else errorHandler(req, res, new Error('Something went wrong'));
+                    else errorHandler(req, res, new Error(toJapanese['Something went wrong']));
                 }
             });
     },
@@ -66,7 +66,7 @@ module.exports = {
                 if (err) errorHandler(req, res, err);
                 else {
                     await Message.updateMany({ empId: req.params.empId }, { isRead: true });
-                    successHandler(req, res, 'Viewing messages', data);
+                    successHandler(req, res, toJapanese['Viewing messages'], data);
                 }
             })
     }

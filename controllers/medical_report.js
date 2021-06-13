@@ -5,6 +5,7 @@
 **/
 const MedicalReport = require('../models/medical_report');
 const User = require('../models/user');
+const { toJapanese } = require('../utils/constant');
 const { errorHandler, successHandler } = require('../utils/handler');
 
 module.exports = {
@@ -22,7 +23,7 @@ module.exports = {
                         user.isInfected = data.infectionRisk;
                         await user.save();
                     }
-                    successHandler(req, res, 'Data updated successfully', data);
+                    successHandler(req, res, toJapanese['Data updated successfully'], data);
                 }
             });
     },
@@ -33,7 +34,7 @@ module.exports = {
         await MedicalReport
             .create(req.body, (err, data) => {
                 if (err) errorHandler(req, res, err);
-                else successHandler(req, res, 'Data created successfully', { success: true });
+                else successHandler(req, res, toJapanese['Data created successfully'], { success: true });
             });
     },
     /**
@@ -85,7 +86,7 @@ module.exports = {
             }
         ]).exec((err, data) => {
             if (err) errorHandler(req, res, err);
-            else successHandler(req, res, 'Data listed successfully', data);
+            else successHandler(req, res, toJapanese['Data listed successfully'], data);
         });
     },
     /**
@@ -132,7 +133,7 @@ module.exports = {
             }
         ]).exec((err, data) => {
             if (err) errorHandler(req, res, err);
-            else successHandler(req, res, 'Data listed successfully', data);
+            else successHandler(req, res, toJapanese['Data listed successfully'], data);
         });
     },
     /**
@@ -150,7 +151,7 @@ module.exports = {
             .sort({ createdAt: -1 })
             .exec((err, data) => {
                 if (err) errorHandler(req, res, err);
-                else successHandler(req, res, 'Data listed successfully', data);
+                else successHandler(req, res, toJapanese['Data listed successfully'], data);
             });
     },
     getByUser: async (req, res) => {
@@ -161,8 +162,8 @@ module.exports = {
                 if (err) errorHandler(req, res, err);
                 else {
                     if (data && data.length > 0)
-                        successHandler(req, res, 'Data listed successfully!', data[0]);
-                    else errorHandler(req, res, new Error('You\'ve not input your data yet'));
+                        successHandler(req, res, toJapanese['Data listed successfully'], data[0]);
+                    else errorHandler(req, res, new Error(toJapanese['You have not input your data yet']));
                 }
             });
     },
@@ -173,7 +174,7 @@ module.exports = {
             .exec((err, data) => {
                 if (err) errorHandler(req, res, err);
                 else
-                    successHandler(req, res, 'Data listed successfully', data);
+                    successHandler(req, res, toJapanese['Data listed successfully'], data);
             });
     }
 };

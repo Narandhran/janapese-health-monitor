@@ -6,7 +6,7 @@
 const User = require('../models/user');
 const { validate } = require('../utils/crypto');
 const { sign } = require('../utils/jwt');
-const { initAdmin, verifyOTP } = require('../utils/constant');
+const { initAdmin, verifyOTP, toJapanese } = require('../utils/constant');
 const XL2JSON = require('../utils/excel2json');
 const { loadMulter } = require('../utils/multer');
 const GENERATOR = require('../utils/string_generator');
@@ -50,15 +50,16 @@ module.exports = {
                         e.role = e.role ? (e.role).toUpperCase() : 'USER';
                         e.email = (e.email).toLowerCase();
                     });
-                    if (dataError) errorHandler(req, res, new Error('Employee number and Email should\'t be empty, check the excel sheet properly'));
+                    const { toJapanese } = require('../utils/constant');
+                    if (dataError) errorHandler(req, res, new Error(toJapanese['Employee number and Email should not be empty, check the excel sheet properly']));
                     else {
                         await User.insertMany(users, (err, data) => {
                             if (err) errorHandler(req, res, err);
-                            successHandler(req, res, 'Data imported successfully', {});
+                            successHandler(req, res, toJapanese['Data imported successfully'], {});
                         });
                     }
                 }
-                else errorHandler(req, res, new Error('Data is either empty or not valid'));
+                else errorHandler(req, res, new Error(toJapanese['Data is either empty or not valid']));
             }
         });
     },
@@ -70,7 +71,7 @@ module.exports = {
         userObj.uuid = GENERATOR.generateUUID((userObj.empId).toUpperCase());
         await User.create(userObj, (err, data) => {
             if (err) errorHandler(req, res, err);
-            else successHandler(req, res, 'Success', data);
+            else successHandler(req, res, toJapanese['Success'], data);
         });
     },
     /**
@@ -85,9 +86,9 @@ module.exports = {
                     empId: isUser.empId,
                     _id: isUser._id,
                     role: isUser.role,
-                    access: isUser.role.toLowerCase() == 'admin' ? isUser.access : ['none']
+                    access: isUser.role.toLowerCase() == 'admin' ? isUser.access : []
                 };
-                successHandler(req, res, 'Login success', {
+                successHandler(req, res, toJapanese['Login success'], {
                     token: sign(payload),
                     name: isUser.name,
                     email: isUser.email,
@@ -99,8 +100,8 @@ module.exports = {
                     role: isUser.role
                 });
             }
-            else errorHandler(req, res, new Error('Incorrect password, try again'))
-        } else errorHandler(req, res, new Error('User does not exist'));
+            else errorHandler(req, res, new Error(toJapanese['Incorrect password, try again']))
+        } else errorHandler(req, res, new Error(toJapanese['User does not exist']));
     },
     /**
      * Web dashboard
@@ -122,7 +123,7 @@ module.exports = {
                     if (user.isInfected) infected += 1;
                 });
             }
-            successHandler(req, res, 'Success', { total, registered, infected, unregistered });
+            successHandler(req, res, toJapanese['Success'], { total, registered, infected, unregistered });
         });
     },
     /**
@@ -133,7 +134,7 @@ module.exports = {
         userObj.uuid = GENERATOR.generateUUID(userObj.empId);
         await User.create(userObj, (err, data) => {
             if (err) errorHandler(req, res, err);
-            else successHandler(req, res, 'Data added successfully', { success: true });
+            else successHandler(req, res, toJapanese['Data created successfully'], { success: true });
         })
     },
     /**
@@ -146,9 +147,9 @@ module.exports = {
         if (isVerified) {
             user.status = true;
             await user.save();
-            successHandler(req, res, 'Success', { verified: true });
+            successHandler(req, res, toJapanese['Success'], { verified: true });
         }
-        else errorHandler(req, res, new Error('Invalid OTP, try again'));
+        else errorHandler(req, res, new Error(toJapanese['Invalid OTP, try again']));
     },
     /**
      * Mobile login
@@ -157,7 +158,7 @@ module.exports = {
         let { fcmToken = '', email, password } = req.body;
         let isUser = await User.findOne({ email });
         if (isUser) {
-            if (!isUser.status) errorHandler(req, res, new Error('Email not verified yet'));
+            if (!isUser.status) errorHandler(req, res, new Error(toJapanese['Email not verified yet']));
 
             else if (validate(password, isUser.password)) {
                 if (fcmToken) {
@@ -170,7 +171,7 @@ module.exports = {
                     role: isUser.role,
                     access: isUser.role.toLowerCase() == 'admin' ? isUser.access : []
                 };
-                successHandler(req, res, 'Login success', {
+                successHandler(req, res, toJapanese['Login success'], {
                     token: sign(payload),
                     name: isUser.name,
                     empId: isUser.empId,
@@ -182,15 +183,15 @@ module.exports = {
                     gender: isUser.gender,
                     role: isUser.role
                 });
-            } else errorHandler(req, res, new Error('Incorrect password, try again!'));
-        } else errorHandler(req, res, new Error('User not exist!!'));
+            } else errorHandler(req, res, new Error(toJapanese['Incorrect password, try again']));
+        } else errorHandler(req, res, new Error(toJapanese['User does not exist']));
     },
     /**
      * Request OTP
      */
     requestOTP: async (req, res) => {
         let isUser = await User.findOne({ email: req.body.email });
-        if (!isUser) errorHandler(req, res, new Error('User is not exist, kindly ask admin'));
+        if (!isUser) errorHandler(req, res, new Error(toJapanese['User is not exist, kindly ask admin']));
         else {
             let otp = GENERATOR.generateOTP();
             sendMail(req, res,
@@ -207,7 +208,7 @@ module.exports = {
             ).then(async () => {
                 isUser.verify = { otp: otp };
                 await isUser.save();
-                successHandler(req, res, 'OTP sent successfully', { success: true })
+                successHandler(req, res, toJapanese['OTP sent successfully'], { success: true })
             }).catch(e => errorHandler(req, res, e));
         }
     },
@@ -217,13 +218,13 @@ module.exports = {
     resetPassword: async (req, res) => {
         let { email, otp, password } = req.body;
         let isUser = await User.findOne({ email });
-        if (!isUser) errorHandler(req, res, new Error('Something went wrong!!'));
+        if (!isUser) errorHandler(req, res, new Error(toJapanese['Something went wrong']));
         else if (verifyOTP(otp, isUser.verify)) {
             isUser.password = password;
             await isUser.save();
-            successHandler(req, res, 'Password updated successfully', { success: true });
+            successHandler(req, res, toJapanese['Password updated successfully'], { success: true });
         }
-        else errorHandler(req, res, new Error('Invalid OTP, try again!'));
+        else errorHandler(req, res, new Error(toJapanese['Invalid OTP, try again']));
     },
     /**
      * Verify account
@@ -231,14 +232,14 @@ module.exports = {
     verifyAccount: async (req, res) => {
         let { email, otp } = req.body;
         let isUser = await User.findOne({ email });
-        if (!isUser) errorHandler(req, res, new Error('Something went wrong!!'));
+        if (!isUser) errorHandler(req, res, new Error(toJapanese['Something went wrong']));
         else {
             if (isUser.verify.otp == otp) {
                 isUser.status = true;
                 await isUser.save();
-                successHandler(req, res, 'OTP verified successfully', { success: true });
+                successHandler(req, res, toJapanese['OTP verified successfully'], { success: true });
             }
-            else errorHandler(req, res, new Error('Invalid OTP, try again!'));
+            else errorHandler(req, res, new Error(toJapanese['Invalid OTP, try again']));
         }
     }
 }

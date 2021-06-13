@@ -1,5 +1,6 @@
 const QA = require("../models/qa")
 const { errorHandler, successHandler } = require('../utils/handler');
+const { toJapanese } = require('../utils/constant');
 const logger = require('../utils/logger');
 
 module.exports = {
@@ -7,7 +8,7 @@ module.exports = {
         await QA.create(req.body, (err, data) => {
             if (err) errorHandler(req, res, err);
             else {
-                successHandler(req, res, 'Data created successfully', { success: true });
+                successHandler(req, res, toJapanese['Data created successfully'], { success: true });
             }
         });
     },
@@ -17,7 +18,7 @@ module.exports = {
             .exec((err, data) => {
                 if (err) errorHandler(req, res, err);
                 else {
-                    successHandler(req, res, 'Data updated successfully', { success: true });
+                    successHandler(req, res, toJapanese['Data updated successfully'], { success: true });
                 }
             });
 
@@ -26,7 +27,7 @@ module.exports = {
         await QA.find({}, (err, data) => {
             if (err) errorHandler(req, res, err);
             else {
-                successHandler(req, res, 'Data listed successfully!', data);
+                successHandler(req, res, toJapanese['Data listed successfully'], data);
             }
         });
     }

@@ -39,3 +39,27 @@ module.exports.mail = {
     refreshToken: '1//0424IqSkGIQB3CgYIARAAGAQSNwF-L9Irh2cPZp7VdOu31dAJA5UD3d9Nb8_2NpP-8xVJbyU4h6EgeovJrbGi9i2rSo-woqvYFLY',
     accessToken: 'ya29.a0AfH6SMByuIhKYZqinP3cXJ3l-U5DVoM_8KL8G-h5ukLSTN09xNmuBiRvOZlchsgCVbRrl-Q9r1MPYV9yKt8KIb1Y0TfaY4mpUv1swJOz27P4zfZ70l3Q1SvJiGew1shIdxqZRKGQrunMscacB0LsFTF9cpFd',
 }
+module.exports.toJapanese = {
+    "Success": "完了",
+    "Data not found": "データが見つかりませんでした",
+    "Data updated successfully": "データが更新されました",
+    "Data listed successfully": "データが一覧済みでした",
+    "Some error occured, contact Admin": "エラーが発生されました。管理者に連絡してください",
+    "Data created successfully": "データが作成されました",
+    "You have not input your data yet": "まだデータを入力していません",
+    "Message(s) has been sent": "メッセージを送りました",
+    "Something went wrong": "エラーが発生されました",
+    "Viewing messages": "メッセージをみています",
+    "Employee number and Email should not be empty, check the excel sheet properly": "従業員番号とメールアドレスを入力する必要があります。Excelシートを適切に確認してください",
+    "Data imported successfully": "データを読み込みました",
+    "Data is either empty or not valid": "データが空いているか無効である",
+    "Login success": "ログイン完了",
+    "Incorrect password, try again": "パスワードが正しくありません。もう一度お試し願います",
+    "User does not exist": "ユーザーは存在しません",
+    "Invalid OTP, try again": "無効なOTP、もう一度お試し願います",
+    "Email not verified yet": "メールはまだ確認されていません",
+    "User is not exist, kindly ask admin": "ユーザーが存在しません。管理者にご連絡ください",
+    "OTP sent successfully": "OTP を送信しました",
+    "Password updated successfully": "パスワードが更新されました",
+    "OTP verified successfully": "OTP が確認されました"
+}
