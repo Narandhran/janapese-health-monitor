@@ -15,5 +15,12 @@ module.exports = {
             });
         }
 
+    },
+    viewData: async (req, res) => {
+        await CloseContact.find({ empId: req.params.empId})
+            .exec((err, data) => {
+                if (err) errorHandler(req, res, err);
+                else successHandler(req, res, toJapanese['Data listed successfully'], data);
+            })
     }
 }
