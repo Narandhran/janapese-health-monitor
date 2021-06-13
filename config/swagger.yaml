@@ -559,6 +559,7 @@ paths:
           type: string
           description: ''
           required: true
+# Medical report controller        
   /report/m/create:
     post:
       summary: Create data (M)
@@ -634,7 +635,7 @@ paths:
           type: string
           description: ''
           required: true
-  /report/m/view_history/{empId}:
+  /report/m/view_history/{week}:
     get:  
       summary: View report history by employee(M)
       tags:
@@ -653,7 +654,7 @@ paths:
           description: Bad request
       parameters:
         - in: path
-          name: empId
+          name: week
           type: string
           description: ''
           required: true
@@ -820,3 +821,34 @@ paths:
               dayOfWeek:
                 type: string
                 default: '1,3,5'
+# Close contact controller
+  /close_contact/w/create:
+    post:
+      summary: Create closed contact (M)
+      tags: 
+        - Closed contact
+      description: Create closed contact
+      consumes: 
+        - application/json
+      produces:
+        - application/json
+      security:
+        - bearerAuth: []
+      responses: 
+        '200':
+          description: Success
+        '204':
+          description: Content not found
+        '400':
+          description: Bad request
+      parameters:
+        - in: body
+          name: create
+          required: true
+          description: ''
+          schema:
+            properties:
+              closedContacts:
+                type: array
+                items: 
+                  type: string

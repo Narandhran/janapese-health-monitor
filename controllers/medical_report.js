@@ -7,6 +7,7 @@ const MedicalReport = require('../models/medical_report');
 const User = require('../models/user');
 const { toJapanese } = require('../utils/constant');
 const { errorHandler, successHandler } = require('../utils/handler');
+const moment = require('moment');
 
 module.exports = {
     /**
@@ -168,8 +169,15 @@ module.exports = {
             });
     },
     getHistoryByUser: async (req, res) => {
+        let { week = 1 } = req.params;
+        week *= 7;
+        let date = moment().utcOffset(0);
+        date.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
         await MedicalReport
-            .find({ empId: req.params.empId })
+            .find({
+                empId: req.verifiedToken.empId,
+                createdAt: { $gt: date.subtract(week, 'days') }
+            })
             .sort({ createdAt: -1 })
             .exec((err, data) => {
                 if (err) errorHandler(req, res, err);
