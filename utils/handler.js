@@ -3,6 +3,7 @@
  * @description - Custom error handler
  * @date - 2021-05-31 14:13:04
 **/
+const logger = require('../utils/logger');
 var wrapError = (request, status, message, error) => {
     /*
      errorLogger.log('error', {
@@ -18,6 +19,7 @@ var wrapError = (request, status, message, error) => {
          }
      });
      */
+    logger.error(`${error.message} || ${message} -  ${request.originalUrl}`);
     return {
         status: status || 400,
         message: message || 'No message provided',

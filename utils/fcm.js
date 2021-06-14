@@ -36,7 +36,7 @@ module.exports = {
     },
 
     sendFcmMessagePromise: (message) => {
-        console.log(JSON.stringify(message));
+        // console.log(JSON.stringify(message));
         return FCM.send(message);
     },
 
