@@ -895,7 +895,7 @@ paths:
           description: Content not found
         '400':
           description: Bad request
-# Close contact controller
+# Closed contact controller
   /close_contact/w/create:
     post:
       summary: Create closed contact (M)
@@ -926,3 +926,28 @@ paths:
                 type: array
                 items: 
                   type: string
+  /close_contact/w/view/{empId}:
+    get:
+      summary: View closed contact (W)
+      tags: 
+        - Closed contact
+      description: View closed contact
+      consumes: 
+        - application/json
+      produces:
+        - application/json
+      security:
+        - bearerAuth: []
+      responses: 
+        '200':
+          description: Success
+        '204':
+          description: Content not found
+        '400':
+          description: Bad request
+      parameters:
+        - in: path
+          name: empId
+          required: true
+          description: ''
+          type: string

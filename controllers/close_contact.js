@@ -1,5 +1,7 @@
 const CloseContact = require('../models/close_contact');
+const MedicalReport = require('../models/medical_report');
 const { toJapanese } = require('../utils/constant');
+const moment = require('moment');
 const { errorHandler, successHandler } = require('../utils/handler');
 
 module.exports = {
@@ -17,10 +19,27 @@ module.exports = {
 
     },
     viewData: async (req, res) => {
-        await CloseContact.find({ empId: req.params.empId})
-            .exec((err, data) => {
-                if (err) errorHandler(req, res, err);
-                else successHandler(req, res, toJapanese['Data listed successfully'], data);
-            })
+        let date = moment().utcOffset(0);
+        date.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+        try {
+            let ccList = await CloseContact
+                .find({
+                    empId: req.params.empId,
+                    createdAt: { $gt: date.subtract(14, 'days') }
+                }).lean();
+            uuids = ccList.map(e => {
+                return e.target;
+            });
+            await MedicalReport
+                .find({ uuid: { $in: uuids } })
+                .sort({ antigen: -1, bodyTemperature: -1 })
+                .exec((err, data) => {
+                    if (err) errorHandler(req, res, err);
+                    else successHandler(req, res, toJapanese['Data listed successfully'], data);
+                });
+
+        } catch (error) {
+            errorHandler(req, res, error);
+        }
     }
 }

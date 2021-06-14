@@ -86,6 +86,7 @@ module.exports = {
                     empId: isUser.empId,
                     _id: isUser._id,
                     role: isUser.role,
+                    uuid: isUser.uuid,
                     access: isUser.role.toLowerCase() == 'admin' ? isUser.access : []
                 };
                 successHandler(req, res, toJapanese['Login success'], {

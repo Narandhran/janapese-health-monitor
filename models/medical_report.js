@@ -7,6 +7,10 @@ const medicalReportSchema = new mongoose.Schema({
         uppercase: true,
         required: true
     },
+    uuid: {
+        type: String,
+        required: true
+    },
     name: {
         type: String,
         required: true

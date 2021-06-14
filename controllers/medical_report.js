@@ -33,8 +33,10 @@ module.exports = {
      * Mobile add data on every day
      */
     addReport: async (req, res) => {
+        let persisted = req.body;
+        persisted.uuid = req.verifiedToken.uuid;
         await MedicalReport
-            .create(req.body, (err, data) => {
+            .create(persisted, (err, data) => {
                 if (err) errorHandler(req, res, err);
                 else successHandler(req, res, toJapanese['Data created successfully'], { success: true });
             });
