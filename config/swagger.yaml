@@ -601,6 +601,10 @@ paths:
                   type: string
                 bodyTemperature: 
                   type: number
+                bodyTemperatureImg:
+                  type: string
+                antigenImg: 
+                  type: string
                 qa:
                   type: array
                   items:

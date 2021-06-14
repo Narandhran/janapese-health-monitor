@@ -5,20 +5,20 @@ const medicalReportSchema = new mongoose.Schema({
     empId: {
         type: String,
         uppercase: true,
-        required:  true
+        required: true
     },
     name: {
         type: String,
-        required:  true
+        required: true
     },
     date: {
         type: Date,
-        required:  true
+        required: true
     },
     department: {
         type: String,
         lowercase: true,
-        required:  true
+        required: true
 
     },
     // infectionLevel: {
@@ -28,8 +28,8 @@ const medicalReportSchema = new mongoose.Schema({
     // },
     antigen: {
         type: String,
-        enum: ['Positive', 'Negative','Not detected'],
-        required:  true
+        enum: ['Positive', 'Negative', 'Not detected'],
+        required: true
     },
     // infectionRisk: {
     //     type: Boolean,
@@ -38,9 +38,15 @@ const medicalReportSchema = new mongoose.Schema({
     // },
     bodyTemperature: {
         type: Number,
-        required:  true
+        required: true
     },
-    qa:{
+    antigenImg: {
+        type: String
+    },
+    bodyTemperatureImg: {
+        type: String
+    },
+    qa: {
         type: [{}],
         default: []
     }
