@@ -18,7 +18,7 @@ var generate = (genLength, getChar) => {
 };
 
 module.exports.generateUUID = (empId, countryCode = '81') => {
-    let uuid = `${empId}${countryCode}${generate(10, alphaNumericBig)}`;
+    let uuid = `ORGWARE${empId}${countryCode}${generate(10, alphaNumericBig)}`;
     while (uuid.length < 32) {
         uuid += '0';
     }
