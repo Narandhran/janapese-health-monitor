@@ -4,6 +4,7 @@
  * @date - 2021-06-10 18:17:55
 **/
 const MasterData = require('../models/MasterData');
+const Department = require('../models/department');
 const { errorHandler, successHandler } = require('../utils/handler');
 const { sendFCMremainder } = require('./sheduler');
 const { toJapanese } = require('../utils/constant');
@@ -31,5 +32,11 @@ module.exports = {
         let response = await sendFCMremainder.reschedule(spec);
         if (response) successHandler(req, res, toJapanese['Data updated successfully'], { success: true });
         else errorHandler(req, res, new Error(toJapanese['Some error occured, contact Admin']));
+    },
+    listDepartment: async (req, res) => {
+        await Department.find({}, (err, data) => {
+            if (err) errorHandler(req, res, err);
+            else successHandler(req, res, toJapanese['Data updated successfully'], data);
+        })
     }
 }

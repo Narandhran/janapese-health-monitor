@@ -2,12 +2,17 @@ const mongoose = require('mongoose');
 var uniqueValidator = require('mongoose-unique-validator');
 
 const departmentSchema = new mongoose.Schema({
-    department: {
+    jDepartment: {
+        type: String,
+        lowercase: true
+    },
+    eDepartment: {
         type: String,
         lowercase: true
     },
     status: {
-        type: Boolean
+        type: Boolean,
+        default: true
     }
 }, { collection: 'departments', timestamps: true });
 
