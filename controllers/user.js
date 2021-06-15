@@ -22,7 +22,7 @@ module.exports = {
     initUser: async () => {
         let isAdmin = await User.findOne({ name: initAdmin.name }).lean();
         if (!isAdmin) {
-            User.create({ ...initAdmin, uuid: GENERATOR.generateUUID('OW001') }, (err, data) => {
+            User.create({ ...initAdmin, uuid: GENERATOR.generateUUID() }, (err, data) => {
                 if (err) console.log('error');
             });
         }
@@ -68,7 +68,7 @@ module.exports = {
      */
     register: async (req, res) => {
         let userObj = req.body;
-        userObj.uuid = GENERATOR.generateUUID((userObj.empId).toUpperCase());
+        userObj.uuid = GENERATOR.generateUUID();
         await User.create(userObj, (err, data) => {
             if (err) errorHandler(req, res, err);
             else successHandler(req, res, toJapanese['Success'], data);
@@ -132,7 +132,7 @@ module.exports = {
      */
     addEmployee: async (req, res) => {
         let userObj = req.body;
-        userObj.uuid = GENERATOR.generateUUID(userObj.empId);
+        userObj.uuid = GENERATOR.generateUUID();
         await User.create(userObj, (err, data) => {
             if (err) errorHandler(req, res, err);
             else successHandler(req, res, toJapanese['Data created successfully'], { success: true });
@@ -170,6 +170,7 @@ module.exports = {
                     empId: isUser.empId,
                     _id: isUser._id,
                     role: isUser.role,
+                    uuid: isUser.uuid,
                     access: isUser.role.toLowerCase() == 'admin' ? isUser.access : []
                 };
                 successHandler(req, res, toJapanese['Login success'], {

@@ -6,7 +6,7 @@ var alphaNumericBig = `${onlyNumber}${onlyBigCase}`;
 var alphaNumericSmall = `${onlyNumber}${onlySmallCase}`;
 var alphaNumericMixed = `${onlyNumber}${onlySmallCase}${onlyBigCase}`;
 var specialString = `${alphaNumericMixed}_@-#`;
-
+const { v4: uuidv4 } = require('uuid');
 var generate = (genLength, getChar) => {
     var length = genLength;
     var charset = getChar;
@@ -17,12 +17,8 @@ var generate = (genLength, getChar) => {
     return persisted;
 };
 
-module.exports.generateUUID = (empId, countryCode = '81') => {
-    let uuid = `jorgware-${empId.substr(-4, 4)}-${countryCode}00-${generate(4, alphaNumericSmall)}-`;
-    while (uuid.length < 36) {
-        uuid += '0';
-    }
-    return uuid;
+module.exports.generateUUID = () => {
+    return uuidv4();
 };
 
 module.exports.generateOTP = () => {
