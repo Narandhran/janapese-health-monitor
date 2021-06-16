@@ -50,12 +50,12 @@ module.exports = {
                         e.role = e.role ? (e.role).toUpperCase() : 'USER';
                         e.email = (e.email).toLowerCase();
                     });
-                    const { toJapanese } = require('../utils/constant');
                     if (dataError) errorHandler(req, res, new Error(toJapanese['Employee number and Email should not be empty, check the excel sheet properly']));
                     else {
                         await User.insertMany(users, (err, data) => {
                             if (err) errorHandler(req, res, err);
-                            successHandler(req, res, toJapanese['Data imported successfully'], {});
+                            else
+                                successHandler(req, res, toJapanese['Data imported successfully'], {});
                         });
                     }
                 }
@@ -119,13 +119,23 @@ module.exports = {
             else {
                 data.forEach((user, index) => {
                     total += 1;
+                    if (user.antigen == 'Positive' || user.bodyTemperature > 37) infected += 1;
                     if (user.status) registered += 1;
                     else unregistered += 1;
-                    if (user.isInfected) infected += 1;
                 });
             }
             successHandler(req, res, toJapanese['Success'], { total, registered, infected, unregistered });
         });
+    },
+    /**
+     * Web list employees
+     */
+    listEmployee: async (req, res) => {
+        await User.find({ name: { $ne: 'admin' } }, 'empId email department gender role name mobile')
+            .exec((err, data) => {
+                if (err) errorHandler(req, res, err);
+                else successHandler(req, res, toJapanese['Data listed successfully'], data);
+            })
     },
     /**
      * Web add employee

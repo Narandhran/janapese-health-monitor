@@ -23,7 +23,7 @@ module.exports = {
             .find({}, 'distance timeDuration')
             .exec((err, data) => {
                 if (err) errorHandler(req, res, err);
-                successHandler(req, res, toJapanese['Data listed successfully'], { success: true });
+                successHandler(req, res, toJapanese['Data listed successfully'], data);
             })
     },
     updateFCMRemainderValue: async (req, res) => {

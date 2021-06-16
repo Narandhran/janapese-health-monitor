@@ -147,9 +147,11 @@ module.exports = {
         let { name = '', empId = '', department = '', sDate = '', tDate = '' } = req.body;
         let filterQuery = {
             $or: [
-                { name }, { empId }, { department }, { date: { $gte: new Date(sDate).setHours(0, 0, 0, 0) }, date: { $lte: new Date(tDate).setHours(0, 0, 0, 0) } }
+                { name }, { empId }, { department }
             ]
         }
+        if (sDate && sDate != '' && sDate != ' ')
+            filterQuery.$or.push({ date: { $gte: new Date(sDate).setHours(0, 0, 0, 0) }, date: { $lte: new Date(tDate).setHours(0, 0, 0, 0) } });
         await MedicalReport
             .find(filterQuery)
             .sort({ createdAt: -1 })

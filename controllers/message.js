@@ -64,7 +64,7 @@ module.exports = {
     },
     viewMessages: async (req, res) => {
         await Message
-            .find({ empId: req.params.empId }, 'title message createdAt')
+            .find({ empId: req.params.empId }, 'title message createdAt isRead')
             .sort({ createdAt: -1 })
             .exec(async (err, data) => {
                 if (err) errorHandler(req, res, err);

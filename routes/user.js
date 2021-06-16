@@ -9,6 +9,7 @@ module.exports = app => {
     app.get('/user/p/dashboard', authenticate, authorize(['ADMIN']), userControl.dashboard);
     app.post('/user/p/add_employee', authenticate, authorize(['ADMIN']), userControl.addEmployee);
     app.post('/user/p/import_user', authenticate, authorize(['ADMIN']), userControl.importUsers);
+    app.get('/user/p/list_employee', authenticate, authorize(['ADMIN']), userControl.listEmployee);
 
 
     /**
