@@ -498,19 +498,16 @@ paths:
           required: true
           description: ''
           schema: 
-            type: array
-            items:
-              type: object
-              properties:
-                empId: 
+            properties:
+              message: 
+                type: string
+              isForAll: 
+                type: boolean
+                default: false
+              userIds: 
+                type: array
+                items: 
                   type: string
-                title: 
-                  type: string
-                message: 
-                  type: string
-                isForAll: 
-                  type: boolean
-                  default: false
   /message/m/view_messages/{empId}:
     get:
       summary: View messages (M)
