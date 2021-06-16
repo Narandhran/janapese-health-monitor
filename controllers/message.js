@@ -34,16 +34,16 @@ module.exports = {
                 errorHandler(req, res, error);
             }
         } else {
-            await User.find({ $and: [{ empId: { $in: userIds } }, { fcmToken: { $ne: '' } }] }, 'fcmToken')
+            await User.find({ $and: [{ empId: { $in: userIds } }, { fcmToken: { $ne: '' } }] }, 'empId fcmToken')
                 .exec(async (err, users) => {
                     if (err) errorHandler(req, res, err);
                     else {
                         try {
                             let tokens = [], messages = [];
-                            for (user in users) {
+                            users.forEach(user => {
                                 tokens.push(user.fcmToken);
                                 messages.push({ empId: user.empId, title: '通知メッセージ', message: message || bodyMessage, isForAll: false });
-                            }
+                            });
                             await Message.insertMany(messages);
                             let messageOption = loadFcmMessage(
                                 tokens,
