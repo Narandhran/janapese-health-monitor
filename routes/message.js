@@ -4,7 +4,7 @@ module.exports = app => {
     /**
      * Web routes
      */
-    app.put('/message/p/create', authenticate, authorize(['ADMIN']), messageControl.insertMessages);
+    app.post('/message/p/create', authenticate, authorize(['ADMIN']), messageControl.insertMessages);
     /**
      * Mobile routes
      */

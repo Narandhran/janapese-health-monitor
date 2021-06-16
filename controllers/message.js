@@ -5,19 +5,20 @@
 **/
 const Message = require('../models/message');
 const User = require('../models/user');
+const moment = require('moment');
 const { loadFcmMessage, loadFcmTopics, sendFcmMessagePromise } = require('../utils/fcm');
 const { errorHandler, successHandler } = require('../utils/handler');
 const { FCM_CONSTANT, topicMessage, toJapanese } = require('../utils/constant');
 const user = require('../models/user');
 module.exports = {
     insertMessages: async (req, res) => {
-        var { isForAll, userIds, message } = req.body;
+        let { isForAll, userIds, message } = req.body;
+        let bodyMessage = '本日の健康状態の登録がまだ実施されておりません。'
+            + '健康状態の入力後、登録をお願いします。'
+            + '未登録日：06月11日分 ' + moment(new Date()).format("DD/MM/YYYY") +
+            + '従業員の皆様とそのご家族様を守る為、ご協力をお願いいたします';
         if (isForAll) {
             try {
-                let bodyMessage = '本日の健康状態の登録がまだ実施されておりません。'
-                    + '健康状態の入力後、登録をお願いします。'
-                    + '未登録日：06月11日分 ' + moment(new Date()).format("DD/MM/YYYY") +
-                    + '従業員の皆様とそのご家族様を守る為、ご協力をお願いいたします';
                 let messages = new Message({ empId: 'FORALL', title: '通知メッセージ', message: message || bodyMessage, isForAll: true });
                 await messages.save();
                 topicMessage = loadFcmTopics(
@@ -45,12 +46,12 @@ module.exports = {
                                 messages.push({ empId: user.empId, title: '通知メッセージ', message: message || bodyMessage, isForAll: false });
                             }
                             await Message.insertMany(messages);
-                            let message = loadFcmMessage(
+                            let messageOption = loadFcmMessage(
                                 tokens,
                                 '通知メッセージ',
                                 bodyMessage
                             );
-                            sendFcmMessagePromise(message)
+                            sendFcmMessagePromise(messageOption)
                                 .then(() => {
                                     successHandler(req, res, toJapanese['Message(s) has been sent'], { success: true });
                                 })
