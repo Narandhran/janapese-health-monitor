@@ -37,7 +37,10 @@ module.exports = {
                 errorHandler(req, res, err);
             }
             else {
-                let persisted = await XL2JSON.convert(req.file.filename);
+                let persisted = null;
+                try {
+                    persisted = await XL2JSON.convert(req.file.filename);
+                } catch (e) { errorHandler(req, res, e); }
                 let users = persisted.Sheet1;
                 let dataError = false;
                 if (users && users.length > 0) {
