@@ -3,7 +3,7 @@
  * @description - Message controller
  * @date - 2021-05-31 20:18:54
 **/
-const Message = require('../models/message');
+var Message = require('../models/message');
 const User = require('../models/user');
 const moment = require('moment');
 const { loadFcmMessage, loadFcmTopics, sendFcmMessagePromise } = require('../utils/fcm');
@@ -19,8 +19,8 @@ module.exports = {
             + '従業員の皆様とそのご家族様を守る為、ご協力をお願いいたします';
         if (isForAll) {
             try {
-                let messages = new Message({ empId: 'FORALL', title: '通知メッセージ', message: message || bodyMessage, isForAll: true });
-                await messages.save();
+                let newMessages = new Message({ empId: 'FORALL', title: '通知メッセージ', message: message || bodyMessage, isForAll: true });
+                await newMessages.save();
                 topicMessage = loadFcmTopics(
                     FCM_CONSTANT.alert_medical_report,
                     '通知メッセージ',
