@@ -52,9 +52,11 @@ module.exports = {
                             e.access = ((e.access).toUpperCase()).split(',');
                         e.role = e.role ? (e.role).toUpperCase() : 'USER';
                         e.email = (e.email).toLowerCase();
+                        e.uuid = GENERATOR.generateUUID();
                     });
                     if (dataError) errorHandler(req, res, new Error(toJapanese['Employee number and Email should not be empty, check the excel sheet properly']));
                     else {
+
                         await User.insertMany(users, (err, data) => {
                             if (err) errorHandler(req, res, err);
                             else
