@@ -9,7 +9,6 @@ const moment = require('moment');
 const { loadFcmMessage, loadFcmTopics, sendFcmMessagePromise } = require('../utils/fcm');
 const { errorHandler, successHandler } = require('../utils/handler');
 const { FCM_CONSTANT, topicMessage, toJapanese } = require('../utils/constant');
-const user = require('../models/user');
 module.exports = {
     insertMessages: async (req, res) => {
         let { isForAll, userIds, message } = req.body;
