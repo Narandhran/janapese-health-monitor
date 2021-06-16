@@ -618,7 +618,7 @@ paths:
       summary: Upload temperature image (W)
       tags:
         - Result data
-      description: Upload temperature image
+      description: Upload temperature image (fieldname - temperature)
       consumes: 
         - multipart/form-data
       produces: 
@@ -643,7 +643,7 @@ paths:
       summary: Upload antigen image (W)
       tags:
         - Result data
-      description: Upload antigen image
+      description: Upload antigen image (fieldname - temperature)
       consumes: 
         - multipart/form-data
       produces: 
