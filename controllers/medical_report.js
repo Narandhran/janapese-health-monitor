@@ -189,7 +189,7 @@ module.exports = {
             });
     },
     uploadTemperatureImg: async (req, res) => {
-        let upload = loadMulterS3(3, 'temperature').single('temperature');
+        let upload = loadMulterS3(10, 'temperature').single('temperature');
         await upload(req, null, (err) => {
             if (err)
                 errorHandler(req, res, err);
@@ -199,7 +199,7 @@ module.exports = {
         });
     },
     uploadAntigenImg: async (req, res) => {
-        let upload = loadMulterS3(3, 'antigen').single('antigen');
+        let upload = loadMulterS3(10, 'antigen').single('antigen');
         await upload(req, null, (err) => {
             if (err)
                 errorHandler(req, res, err);
