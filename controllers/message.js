@@ -18,7 +18,7 @@ module.exports = {
             + '従業員の皆様とそのご家族様を守る為、ご協力をお願いいたします';
         if (isForAll) {
             try {
-                await newMessages.create({ empId: 'FORALL', title: '通知メッセージ', message: message || bodyMessage, isForAll: true });
+                await Message.create({ empId: 'FORALL', title: '通知メッセージ', message: message || bodyMessage, isForAll: true });
                 topicMessage = loadFcmTopics(
                     FCM_CONSTANT.alert_medical_report,
                     '通知メッセージ',
