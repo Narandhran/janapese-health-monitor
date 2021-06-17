@@ -8,7 +8,7 @@ const fs = require('fs');
 const path = require('path');
 module.exports.convert = async (fileName) => {
     const persisted = await excelToJson({
-        source: fs.readFileSync(path.resolve(`public/registration/${fileName}`)),
+        source: fs.readFileSync(fileName),
         // sourceFile: file,
         sheets: [{
             name: 'Sheet1',

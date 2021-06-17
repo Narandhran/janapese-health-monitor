@@ -39,7 +39,8 @@ module.exports = {
             else {
                 let persisted = null;
                 try {
-                    persisted = await XL2JSON.convert(req.file.filename);
+                    // console.log('path: ' +req.file.path);
+                    persisted = await XL2JSON.convert(req.file.path);
                 } catch (e) { errorHandler(req, res, e); }
                 let users = persisted.Sheet1;
                 let dataError = false;
@@ -56,7 +57,7 @@ module.exports = {
                     });
                     if (dataError) errorHandler(req, res, new Error(toJapanese['Employee number and Email should not be empty, check the excel sheet properly']));
                     else {
-
+                        // console.log(`user: ${users}`);
                         await User.insertMany(users, (err, data) => {
                             if (err) errorHandler(req, res, err);
                             else
