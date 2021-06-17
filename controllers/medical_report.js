@@ -48,7 +48,7 @@ module.exports = {
         let matchQuery = {
             $or: [
                 { bodyTemperature: { $gt: 37 } },
-                { antigen: 'Positive' },
+                { antigen: '陽性' },
                 { 'data.ques': 'Infection risk transfer', 'data.answer': 'no' }
             ]
         };
