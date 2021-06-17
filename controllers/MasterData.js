@@ -15,15 +15,20 @@ module.exports = {
             .findByIdAndUpdate(req.params._id, { closedContactSetting: req.body })
             .exec((err, data) => {
                 if (err) errorHandler(req, res, err);
-                successHandler(req, res, toJapanese['Data updated successfully'], { success: true });
+                else
+                    successHandler(req, res, toJapanese['Data updated successfully'], { success: true });
             })
     },
     showClosedContactSetting: async (req, res) => {
         await MasterData
-            .find({}, 'distance timeDuration')
+            .find({})
             .exec((err, data) => {
                 if (err) errorHandler(req, res, err);
-                successHandler(req, res, toJapanese['Data listed successfully'], data);
+                else {
+
+                    let result = data.length > 0 ? data[0].closedContactSetting : { distance: 2, timeDuration: 15 };
+                    successHandler(req, res, toJapanese['Data listed successfully'], result);
+                }
             })
     },
     updateFCMRemainderValue: async (req, res) => {
