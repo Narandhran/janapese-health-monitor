@@ -29,6 +29,9 @@
         "nodemailer-juice": "^1.0.1",
         "uuid": "^8.3.2",
         "winston": "^3.3.3",
+        "xls-to-json-lc": "^0.3.4",
+        "xlsx-to-json": "^0.3.0",
+        "xlsx-to-json-lc": "^0.5.0",
         "xoauth2": "^1.2.0",
         "yamljs": "^0.3.0"
     },

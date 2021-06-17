@@ -7,11 +7,12 @@ const User = require('../models/user');
 const { validate } = require('../utils/crypto');
 const { sign } = require('../utils/jwt');
 const { initAdmin, verifyOTP, toJapanese } = require('../utils/constant');
-const XL2JSON = require('../utils/excel2json');
 const { loadMulter } = require('../utils/multer');
 const GENERATOR = require('../utils/string_generator');
 const { sendMail } = require('../utils/mailer');
 const { errorHandler, successHandler } = require('../utils/handler');
+var xlstojson = require("xls-to-json-lc");
+var xlsxtojson = require("xlsx-to-json-lc");
 
 
 
@@ -37,35 +38,48 @@ module.exports = {
                 errorHandler(req, res, err);
             }
             else {
-                let persisted = null;
-                try {
-                    // console.log('path: ' +req.file.path);
-                    persisted = await XL2JSON.convert(req.file.path);
-                } catch (e) { errorHandler(req, res, e); }
-                let users = persisted.Sheet1;
                 let dataError = false;
-                if (users && users.length > 0) {
-                    users.map((e, i) => {
-                        if (e.email == '' || e.email == undefined || e.email == null
-                            || e.empId == '' || e.empId == undefined || e.empId == null)
-                            dataError = true;
-                        if (e.access)
-                            e.access = ((e.access).toUpperCase()).split(',');
-                        e.role = e.role ? (e.role).toUpperCase() : 'USER';
-                        e.email = (e.email).toLowerCase();
-                        e.uuid = GENERATOR.generateUUID();
-                    });
-                    if (dataError) errorHandler(req, res, new Error(toJapanese['Employee number and Email should not be empty, check the excel sheet properly']));
-                    else {
-                        // console.log(`user: ${users}`);
-                        await User.insertMany(users, (err, data) => {
-                            if (err) errorHandler(req, res, err);
-                            else
-                                successHandler(req, res, toJapanese['Data imported successfully'], {});
-                        });
-                    }
+                if (req.file.originalname.split('.')[req.file.originalname.split('.').length - 1] === 'xlsx') {
+                    exceltojson = xlsxtojson;
+                } else {
+                    exceltojson = xlstojson;
                 }
-                else errorHandler(req, res, new Error(toJapanese['Data is either empty or not valid']));
+                try {
+                    exceltojson({
+                        input: req.file.path,
+                        output: null,
+                        lowerCaseHeaders: false
+                    }, async function (err, result) {
+                        if (err) errorHandler(req, res, err);
+                        else if (result.length > 0) {
+                            result.map((e, i) => {
+                                if (e.email == '' || e.email == undefined || e.email == null
+                                    || e.empId == '' || e.empId == undefined || e.empId == null)
+                                    dataError = true;
+                                if (e.access)
+                                    e.access = ((e.access).toUpperCase()).split(',');
+                                else e.access = []
+                                e.role = e.role ? (e.role).toUpperCase() : 'USER';
+                                e.email = (e.email).toLowerCase();
+                                e.uuid = GENERATOR.generateUUID();
+                            });
+                            let users = result;
+                            if (dataError) errorHandler(req, res, new Error(toJapanese['Employee number and Email should not be empty, check the excel sheet properly']));
+                            else {
+                                await User.insertMany(users, (err, data) => {
+                                    if (err) errorHandler(req, res, err);
+                                    else
+                                        successHandler(req, res, toJapanese['Data imported successfully'], {});
+                                });
+                            }
+
+                        }
+                        else errorHandler(req, res, new Error(toJapanese['Data is either empty or not valid']));
+
+                    });
+                } catch (e) {
+                    errorHandler(req, res, err);
+                }
             }
         });
     },
