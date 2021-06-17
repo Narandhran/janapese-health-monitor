@@ -8,7 +8,7 @@ const User = require('../models/user');
 const moment = require('moment');
 const { loadFcmMessage, loadFcmTopics, sendFcmMessagePromise } = require('../utils/fcm');
 const { errorHandler, successHandler } = require('../utils/handler');
-const { FCM_CONSTANT, topicMessage, toJapanese } = require('../utils/constant');
+const { FCM_CONSTANT, toJapanese } = require('../utils/constant');
 module.exports = {
     insertMessages: async (req, res) => {
         let { isForAll, userIds, message } = req.body;
@@ -18,13 +18,14 @@ module.exports = {
             + '従業員の皆様とそのご家族様を守る為、ご協力をお願いいたします';
         if (isForAll) {
             try {
-                await Message.create({ empId: 'FORALL', title: '通知メッセージ', message: message || bodyMessage, isForAll: true });
-                topicMessage = loadFcmTopics(
+                let newMessages = new Message({ empId: 'FORALL', title: '通知メッセージ', message: message || bodyMessage, isForAll: true });
+                await newMessages.save();
+                let topicMessageOption = loadFcmTopics(
                     FCM_CONSTANT.alert_medical_report,
                     '通知メッセージ',
                     bodyMessage
                 );
-                sendFcmMessagePromise(topicMessage)
+                sendFcmMessagePromise(topicMessageOption)
                     .then(() => {
                         successHandler(req, res, toJapanese['Message(s) has been sent'], { success: true });
                     })
@@ -40,8 +41,7 @@ module.exports = {
                         try {
                             let tokens = [], messages = [];
                             users.forEach(user => {
-                                if (user.fcmToken)
-                                    tokens.push(user.fcmToken);
+                                tokens.push(user.fcmToken);
                                 messages.push({ empId: user.empId, title: '通知メッセージ', message: message || bodyMessage, isForAll: false });
                             });
                             await Message.insertMany(messages);
