@@ -4,6 +4,7 @@
  * @date - 2021-05-30 21:25:45
 **/
 const User = require('../models/user');
+const MedicalReport = require('../models/medical_report');
 const { validate } = require('../utils/crypto');
 const { sign } = require('../utils/jwt');
 const { initAdmin, verifyOTP, toJapanese } = require('../utils/constant');
@@ -134,18 +135,34 @@ module.exports = {
         if (access.length > 0 && access[0] != 'ALL') {
             subQuery = { 'department': { $in: access } };
         }
-        await User.find(subQuery, (err, data) => {
-            if (err) errorHandler(req, res, err);
-            else {
-                data.forEach((user, index) => {
-                    total += 1;
-                    if (user.antigen == 'Positive' || user.bodyTemperature > 37) infected += 1;
-                    if (user.status) registered += 1;
-                    else unregistered += 1;
-                });
-            }
+        Promise.all([
+            await User.find(subQuery).lean(),
+            await MedicalReport.aggregate([
+                {
+                    '$sort': { 'empId': 1, 'createdAt': -1 }
+                },
+                {
+                    '$group': {
+                        '_id': '$empId',
+                        'bodyTemperature': { '$first': '$bodyTemperature' },
+                        'antigen': { '$first': '$antigen' }
+                    }
+                }
+            ])
+        ]).then((data) => {
+            let users = data[0], reports = data[1];
+            users.forEach((user) => {
+                total += 1;
+                if (user.status) registered += 1;
+                else unregistered += 1;
+            });
+            reports.forEach((report) => {
+                if (report.antigen == 'Positive' || report.bodyTemperature > 37 || report.antigen == '陽性') infected += 1;
+            })
             successHandler(req, res, toJapanese['Success'], { total, registered, infected, unregistered });
-        });
+        }).catch(e => errorHandler(req, res, e));
+
+
     },
     /**
      * Web list employees
