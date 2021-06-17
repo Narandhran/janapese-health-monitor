@@ -18,8 +18,7 @@ module.exports = {
             + '従業員の皆様とそのご家族様を守る為、ご協力をお願いいたします';
         if (isForAll) {
             try {
-                let newMessages = new Message({ empId: 'FORALL', title: '通知メッセージ', message: message || bodyMessage, isForAll: true });
-                await newMessages.save();
+                await newMessages.create({ empId: 'FORALL', title: '通知メッセージ', message: message || bodyMessage, isForAll: true });
                 topicMessage = loadFcmTopics(
                     FCM_CONSTANT.alert_medical_report,
                     '通知メッセージ',
@@ -41,7 +40,8 @@ module.exports = {
                         try {
                             let tokens = [], messages = [];
                             users.forEach(user => {
-                                tokens.push(user.fcmToken);
+                                if (user.fcmToken)
+                                    tokens.push(user.fcmToken);
                                 messages.push({ empId: user.empId, title: '通知メッセージ', message: message || bodyMessage, isForAll: false });
                             });
                             await Message.insertMany(messages);
