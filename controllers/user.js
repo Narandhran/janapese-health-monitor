@@ -103,24 +103,27 @@ module.exports = {
         let isUser = await User.findOne({ email }).lean();
         if (isUser) {
             if (validate(password, isUser.password)) {
-                let payload = {
-                    empId: isUser.empId,
-                    _id: isUser._id,
-                    role: isUser.role,
-                    uuid: isUser.uuid,
-                    access: isUser.role.toLowerCase() == 'admin' ? isUser.access : []
-                };
-                successHandler(req, res, toJapanese['Login success'], {
-                    token: sign(payload),
-                    name: isUser.name,
-                    email: isUser.email,
-                    uuid: isUser.uuid,
-                    department: isUser.department,
-                    registrationDate: isUser.registrationDate,
-                    schedule: isUser.schedule,
-                    gender: isUser.gender,
-                    role: isUser.role
-                });
+                if (isUser.role.toLowerCase() == 'admin') {
+                    let payload = {
+                        empId: isUser.empId,
+                        _id: isUser._id,
+                        role: isUser.role,
+                        uuid: isUser.uuid,
+                        access: isUser.role.toLowerCase() == 'admin' ? isUser.access : []
+                    };
+                    successHandler(req, res, toJapanese['Login success'], {
+                        token: sign(payload),
+                        name: isUser.name,
+                        email: isUser.email,
+                        uuid: isUser.uuid,
+                        department: isUser.department,
+                        registrationDate: isUser.registrationDate,
+                        schedule: isUser.schedule,
+                        gender: isUser.gender,
+                        role: isUser.role
+                    });
+                }
+                else errorHandler(req, res, new Error('Access denied, You\'re not authorized to access this portal'));
             }
             else errorHandler(req, res, new Error(toJapanese['Incorrect password, try again']))
         } else errorHandler(req, res, new Error(toJapanese['User does not exist']));
