@@ -28,7 +28,7 @@ module.exports = {
                     createdAt: { $gt: date.subtract(14, 'days') }
                 }).lean();
             uuids = ccList.map(e => {
-                return e.target;
+                return (e.target).toLowerCase();
             });
             await MedicalReport
                 .find({ uuid: { $in: uuids } })
