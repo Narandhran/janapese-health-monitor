@@ -9,7 +9,7 @@ const closeContactSchema = new mongoose.Schema({
     },
     target: {
         type: String,
-        uppercase: true
+        lowercase: true
     }
 }, { collection: 'close_contacts', timestamps: true });
 
