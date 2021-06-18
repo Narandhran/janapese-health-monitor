@@ -113,6 +113,7 @@ module.exports = {
                     };
                     successHandler(req, res, toJapanese['Login success'], {
                         token: sign(payload),
+                        empId: isUser.empId,
                         name: isUser.name,
                         email: isUser.email,
                         uuid: isUser.uuid,
