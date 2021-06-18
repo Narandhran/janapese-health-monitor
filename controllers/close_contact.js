@@ -9,7 +9,7 @@ module.exports = {
         let { closedContacts = [] } = req.body;
         if (closedContacts.length > 0) {
             let persisted = closedContacts.map(e => {
-                return { empId: req.verifiedToken.uuid, target: e };
+                return { empId: req.verifiedToken.empId, target: e };
             });
             await CloseContact.insertMany(persisted, (err, data) => {
                 if (err) errorHandler(req, res, err);
