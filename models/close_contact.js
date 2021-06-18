@@ -4,7 +4,7 @@ var uniqueValidator = require('mongoose-unique-validator');
 const closeContactSchema = new mongoose.Schema({
     empId: {
         type: String,
-        // uppercase: true,
+        uppercase: true,
         index: true
     },
     target: {
