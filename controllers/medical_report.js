@@ -107,13 +107,13 @@ module.exports = {
                 $match: matchQuery
             },
             {
-                $sort: { empId: -1, createdAt: -1 }
+                $sort: { empId: 1, createdAt: -1 }
             },
             {
                 $group: {
                     _id: '$empId',
                     name: { $first: '$name' },
-                    date: { $last: '$date' },
+                    date: { $first: '$createdAt' },
                     department: { $first: '$department' },
                     antigen: { $first: '$antigen' },
                     bodyTemperature: { $first: '$bodyTemperature' },
@@ -133,7 +133,7 @@ module.exports = {
                 }
             },
             {
-                $sort: { date: -1 }
+                $sort: { empId: 1 }
             }
         ]).exec((err, data) => {
             if (err) errorHandler(req, res, err);
