@@ -11,7 +11,7 @@ const { errorHandler, successHandler } = require('../utils/handler');
 const { FCM_CONSTANT, toJapanese } = require('../utils/constant');
 module.exports = {
     insertMessages: async (req, res) => {
-        let { isForAll, userIds, message } = req.body;
+        var { isForAll, userIds, message } = req.body;
         let bodyMessage = '本日の健康状態の登録がまだ実施されておりません。'
             + '健康状態の入力後、登録をお願いします。'
             + '未登録日：06月11日分 ' + moment(new Date()).format("DD/MM/YYYY") +
@@ -50,11 +50,16 @@ module.exports = {
                                 '通知メッセージ',
                                 bodyMessage
                             );
-                            sendFcmMessagePromise(messageOption)
+                            await sendFcmMessagePromise(messageOption)
                                 .then(() => {
                                     successHandler(req, res, toJapanese['Message(s) has been sent'], { success: true });
                                 })
-                                .catch(e => errorHandler(req, res, e));
+                                .catch(e => {
+                                    if (e == 'InvalidRegistration')
+                                        errorHandler(req, res, new Error('FCM token invalid'));
+                                    else
+                                        errorHandler(req, res, e);
+                                });
                         } catch (error) {
                             errorHandler(req, res, error);
                         }

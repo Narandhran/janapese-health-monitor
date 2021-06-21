@@ -1,26 +1,21 @@
-const SCHEDULE = require('node-schedule');
-const User = require('../models/user');
+const MedicalReport = require('./models/medical_report');
 const moment = require('moment');
-const { loadFcmMessage, sendFcmMessagePromise } = require('../utils/fcm');
-const logger = require('../utils/logger');
-const MedicalReport = require('../models/medical_report');
-/**
- * Send Push notification on every monday, wednesday and friday
- */
+const user = require('./models/user');
+const { loadFcmMessage, sendFcmMessagePromise } = require('./utils/fcm');
 
-module.exports.sendFCMremainder = SCHEDULE.scheduleJob('30 6 * * 1,3,5', async function () {
-    let date = moment(new Date()).format("YYYY-MM-DD")
+
+let date = moment(new Date()).format("YYYY-MM-DD")
+let fn = async () => {
     await MedicalReport.find({ createdAt: { $gt: date } }, async (err, data) => {
-        if (err) logger.error(`${err.status || 400} - ${e.message}`);
+        if (err) console.log(err);
         else {
             let uuids = data.map(e => {
                 return e.empId;
             });
-            let senderData = await User.find({ empId: { $nin: uuids }, fcmToken: { $ne: '' } }, 'fcmToken').lean();
+            let senderData = await user.find({ empId: { $nin: uuids }, fcmToken: { $ne: '' } }, 'fcmToken').lean();
             let senderIds = senderData.map(e => {
                 return e.fcmToken;
             });
-            //FCM logic
             let bodyMessage = '本日の健康状態の登録がまだ実施されておりません。'
                 + '健康状態の入力後、登録をお願いします。'
                 + '未登録日：06月11日分 ' + moment(new Date()).format("DD/MM/YYYY")
@@ -31,5 +26,5 @@ module.exports.sendFCMremainder = SCHEDULE.scheduleJob('30 6 * * 1,3,5', async f
                     console.log('Data send successfully');
                 }).catch(e => console.log(`${e.status || 400} - ${e.message}`));
         }
-    });
-});
+    })
+}
