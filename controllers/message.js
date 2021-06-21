@@ -18,7 +18,7 @@ module.exports = {
             + '従業員の皆様とそのご家族様を守る為、ご協力をお願いいたします';
         if (isForAll) {
             try {
-                let newMessages = new Message({ empId: 'FORALL', title: '通知メッセージ', message: message || bodyMessage, isForAll: true });
+                let newMessages = new Message({ empId: 'FORALL', title: '通知メッセージ ' + moment(new Date()).format("DD/MM/YYYY"), message: message || bodyMessage, isForAll: true });
                 await newMessages.save();
             } catch (error) {
                 errorHandler(req, res, error);
@@ -44,7 +44,7 @@ module.exports = {
                             let tokens = [], messages = [];
                             users.forEach(user => {
                                 tokens.push(user.fcmToken);
-                                messages.push({ empId: user.empId, title: '通知メッセージ', message: message || bodyMessage, isForAll: false });
+                                messages.push({ empId: user.empId, title: '通知メッセージ ' + moment(new Date()).format("DD/MM/YYYY"), message: message || bodyMessage, isForAll: false });
                             });
                             await Message.insertMany(messages);
                             let messageOption = loadFcmMessage(
