@@ -20,19 +20,21 @@ module.exports = {
             try {
                 let newMessages = new Message({ empId: 'FORALL', title: '通知メッセージ', message: message || bodyMessage, isForAll: true });
                 await newMessages.save();
-                let topicMessageOption = loadFcmTopics(
-                    FCM_CONSTANT.alert_medical_report,
-                    '通知メッセージ',
-                    bodyMessage
-                );
-                sendFcmMessagePromise(topicMessageOption)
-                    .then(() => {
-                        successHandler(req, res, toJapanese['Message(s) has been sent'], { success: true });
-                    })
-                    .catch(e => errorHandler(req, res, e));
             } catch (error) {
                 errorHandler(req, res, error);
             }
+            let topicMessageOption = loadFcmTopics(
+                FCM_CONSTANT.alert_medical_report,
+                '通知メッセージ',
+                bodyMessage
+            );
+            await sendFcmMessagePromise(topicMessageOption)
+                .then(() => {
+                    successHandler(req, res, toJapanese['Message(s) has been sent'], { success: true });
+                })
+                .catch(e => {
+                    errorHandler(req, res, new Error('FCM Error, Notifications unavailable for this user'));
+                });
         } else {
             await User.find({ $and: [{ empId: { $in: userIds } }, { fcmToken: { $ne: '' } }] }, 'empId fcmToken')
                 .exec(async (err, users) => {
@@ -55,10 +57,7 @@ module.exports = {
                                     successHandler(req, res, toJapanese['Message(s) has been sent'], { success: true });
                                 })
                                 .catch(e => {
-                                    if (e == 'InvalidRegistration')
-                                        errorHandler(req, res, new Error('FCM token invalid'));
-                                    else
-                                        errorHandler(req, res, e);
+                                    errorHandler(req, res, new Error('FCM Error, Notifications unavailable for this user'));
                                 });
                         } catch (error) {
                             errorHandler(req, res, error);
