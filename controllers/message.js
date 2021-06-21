@@ -14,7 +14,7 @@ module.exports = {
         var { isForAll, userIds, message } = req.body;
         let bodyMessage = '本日の健康状態の登録がまだ実施されておりません。'
             + '健康状態の入力後、登録をお願いします。'
-            + '未登録日：06月11日分 ' + moment(new Date()).format("DD/MM/YYYY") +
+            + '未登録日：06月11日分 ' + moment(new Date()).format("YYYY/MM/DD") +
             + '従業員の皆様とそのご家族様を守る為、ご協力をお願いいたします';
         if (isForAll) {
             try {
@@ -44,7 +44,7 @@ module.exports = {
                             let tokens = [], messages = [];
                             users.forEach(user => {
                                 tokens.push(user.fcmToken);
-                                messages.push({ empId: user.empId, title: '通知メッセージ ' + moment(new Date()).format("DD/MM/YYYY"), message: message || bodyMessage, isForAll: false });
+                                messages.push({ empId: user.empId, title: '通知メッセージ ' + moment(new Date()).format("YYYY//MM/DD"), message: message || bodyMessage, isForAll: false });
                             });
                             await Message.insertMany(messages);
                             let messageOption = loadFcmMessage(
