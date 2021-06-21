@@ -36,7 +36,7 @@ module.exports = {
                     errorHandler(req, res, new Error('FCM Error, Notifications unavailable for this user'));
                 });
         } else {
-            await User.find({ $and: [{ empId: { $in: userIds } }, { fcmToken: { $ne: '' } }] }, 'empId fcmToken')
+            await User.find({ empId: { $in: userIds }  }, 'empId fcmToken')
                 .exec(async (err, users) => {
                     if (err) errorHandler(req, res, err);
                     else {
