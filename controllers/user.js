@@ -161,7 +161,8 @@ module.exports = {
                 else unregistered += 1;
             });
             reports.forEach((report) => {
-                if (report.antigen == 'Positive' || report.bodyTemperature > 37 || report.antigen == '陽性') infected += 1;
+                if (report.antigen == 'Positive' || report.bodyTemperature > 37.4 || report.antigen == '陽性') 
+                infected += 1;
             })
             successHandler(req, res, toJapanese['Success'], { total, registered, infected, unregistered });
         }).catch(e => errorHandler(req, res, e));
