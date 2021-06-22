@@ -18,7 +18,7 @@ module.exports = {
             + '従業員の皆様とそのご家族様を守る為、ご協力をお願いいたします';
         if (isForAll) {
             try {
-                let newMessages = new Message({ empId: 'FORALL', title: '通知メッセージ ' + moment(new Date()).format("DD/MM/YYYY"), message: message || bodyMessage, isForAll: true });
+                let newMessages = new Message({ empId: 'FORALL', title: '通知メッセージ ' + moment(new Date()).format("DD/MM/YYYY"), message: message || bodyMessage, isForAll: true, isRead: true });
                 await newMessages.save();
             } catch (error) {
                 errorHandler(req, res, error);
@@ -36,7 +36,7 @@ module.exports = {
                     errorHandler(req, res, new Error('FCM Error, Notifications unavailable for this user'));
                 });
         } else {
-            await User.find({ empId: { $in: userIds }  }, 'empId fcmToken')
+            await User.find({ empId: { $in: userIds } }, 'empId fcmToken')
                 .exec(async (err, users) => {
                     if (err) errorHandler(req, res, err);
                     else {
@@ -68,7 +68,7 @@ module.exports = {
     },
     viewMessages: async (req, res) => {
         await Message
-            .find({ empId: req.params.empId }, 'title message createdAt isRead')
+            .find({ empId: { $in: [req.params.empId, 'FORALL'] } }, 'title message createdAt isRead')
             .sort({ createdAt: -1 })
             .exec(async (err, data) => {
                 if (err) errorHandler(req, res, err);
