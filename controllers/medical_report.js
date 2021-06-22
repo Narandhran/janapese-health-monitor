@@ -144,7 +144,7 @@ module.exports = {
      * Report screen
      */
     filter: async (req, res) => {
-        let { name, empId, department, sDate, tDate } =  req.body;
+        let { name, empId, department, sDate, tDate } = req.body;
         let filterQuery = {};
         if (!name && !empId && !department && (sDate == tDate))
             errorHandler(req, res, new Error('Select atlease one parameter to search'));
@@ -153,6 +153,7 @@ module.exports = {
             if (empId) filterQuery.empId = empId.toUpperCase();
             if (department) filterQuery.department = department.toUpperCase();
             if (sDate != tDate) filterQuery.createdAt = { $gt: new Date(sDate), $lte: new Date(tDate) };
+            else filterQuery.createdAt = { $gt: new Date(sDate) };
 
             await MedicalReport
                 .find(filterQuery)
