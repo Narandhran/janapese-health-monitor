@@ -144,31 +144,24 @@ module.exports = {
      * Report screen
      */
     filter: async (req, res) => {
-        let { name = '', empId = '', department = '', sDate = '', tDate = '' } = req.body;
-        let fsDate = moment(sDate).utcOffset(0), ftDate = moment(tDate).utcOffset(0);
-        fsDate.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-        ftDate.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+        let { name, empId, department, sDate, tDate } =  req.body;
         let filterQuery = {};
-        if (name || empId || department) {
-            filterQuery = {
-                $or: [
-                    { name }, { empId }, { department }
-                ]
-            }
+        if (!name && !empId && !department && (sDate == tDate))
+            errorHandler(req, res, new Error('Select atlease one parameter to search'));
+        else {
+            if (name) filterQuery.name = name.toLowerCase();
+            if (empId) filterQuery.empId = empId.toUpperCase();
+            if (department) filterQuery.department = department.toUpperCase();
+            if (sDate != tDate) filterQuery.createdAt = { $gt: new Date(sDate), $lte: new Date(tDate) };
+
+            await MedicalReport
+                .find(filterQuery)
+                .sort({ createdAt: -1 })
+                .exec((err, data) => {
+                    if (err) errorHandler(req, res, err);
+                    else successHandler(req, res, toJapanese['Data listed successfully'], data);
+                });
         }
-        if (sDate != tDate) {
-            if (name || empId || department)
-                filterQuery.$or.push({ date: { $gt: fsDate, $lte: ftDate } });
-            else
-                filterQuery = { date: { $gt: fsDate, $lte: ftDate } };
-        }
-        await MedicalReport
-            .find(filterQuery)
-            .sort({ createdAt: -1 })
-            .exec((err, data) => {
-                if (err) errorHandler(req, res, err);
-                else successHandler(req, res, toJapanese['Data listed successfully'], data);
-            });
     },
     getByUser: async (req, res) => {
         await MedicalReport
