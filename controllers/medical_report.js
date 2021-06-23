@@ -160,7 +160,7 @@ module.exports = {
             if (name) filterQuery.name = name.toLowerCase();
             if (empId) filterQuery.empId = empId.toUpperCase();
             if (department) filterQuery.department = department.toUpperCase();
-            if (sDate != tDate) filterQuery.createdAt = { $gt: new Date(sDate), $lte: new Date(tDate) };
+            if (sDate != tDate) filterQuery.createdAt = { $gt: new Date(sDate), $lte: new Date(tDate).setDate(new Date(tDate).getDate() + 1) };
             else filterQuery.createdAt = { $gt: new Date(sDate) };
 
             await MedicalReport
