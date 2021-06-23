@@ -29,7 +29,8 @@ module.exports.sendFCMremainder = SCHEDULE.scheduleJob('30 6 * * 1,3,5', async f
             sendFcmMessagePromise(options)
                 .then(() => {
                     console.log('Data send successfully');
-                }).catch(e => console.log(`${e.status || 400} - ${e.message}`));
+                    logger.info(`---------SUCCESS--------- || ${senderIds}`);
+                }).catch(e => logger.error(`${e.status || 400} - ${e.message}`));
         }
     });
 });
