@@ -73,7 +73,7 @@ module.exports = {
                 $group: {
                     _id: '$empId',
                     name: { $first: '$name' },
-                    date: { $last: '$date' },
+                    date: { $first: '$date' },
                     department: { $first: '$department' },
                     antigen: { $first: '$antigen' },
                     bodyTemperature: { $first: '$bodyTemperature' },
