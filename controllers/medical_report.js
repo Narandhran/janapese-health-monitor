@@ -45,7 +45,7 @@ module.exports = {
      * Web View infected people 
      */
     infectedPeople: async (req, res) => {
-        let matchQuery = {
+          let matchQuery = {
             $or: [
                 { bodyTemperature: { $gt: 37.4 } },
                 { antigen: { $in: ['陽性', '擬陽性'] } },
@@ -53,7 +53,7 @@ module.exports = {
                     'qa.question': '1 状態（必須）',
                     'qa.answer': {
                         '$in': [
-                            '病状らしき事象あり', '体調不良（自宅療養)', '体調不良（病院通院)'
+                            '病状らしき事象あり', '体調不良（自宅療養）', '体調不良（病院通院）'
                         ]
                     }
                 }
