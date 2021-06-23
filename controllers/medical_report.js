@@ -70,7 +70,9 @@ module.exports = {
                     department: { $first: '$department' },
                     antigen: { $first: '$antigen' },
                     bodyTemperature: { $first: '$bodyTemperature' },
-                    qa: { $first: '$qa' }
+                    qa: { $first: '$qa' },
+                    antigenImg: { $first: '$antigenImg' },
+                    bodyTemperatureImg: { $first: '$bodyTemperatureImg' }
                 }
             },
             {
@@ -82,7 +84,9 @@ module.exports = {
                     department: 1,
                     antigen: 1,
                     bodyTemperature: 1,
-                    qa: 1
+                    qa: 1,
+                    bodyTemperatureImg: 1,
+                    antigenImg: 1
                 }
             },
             {
