@@ -162,15 +162,14 @@ module.exports = {
             if (department) filterQuery.department = department.toUpperCase();
             if (sDate != tDate) filterQuery.createdAt = { $gt: new Date(sDate), $lte: new Date(tDate).setDate(new Date(tDate).getDate() + 1) };
             else filterQuery.createdAt = { $gt: new Date(sDate) };
-
-            await MedicalReport
-                .find(filterQuery)
-                .sort({ createdAt: -1 })
-                .exec((err, data) => {
-                    if (err) errorHandler(req, res, err);
-                    else successHandler(req, res, toJapanese['Data listed successfully'], data);
-                });
         }
+        await MedicalReport
+            .find(filterQuery)
+            .sort({ createdAt: -1 })
+            .exec((err, data) => {
+                if (err) errorHandler(req, res, err);
+                else successHandler(req, res, toJapanese['Data listed successfully'], data);
+            });
     },
     getByUser: async (req, res) => {
         await MedicalReport
