@@ -73,7 +73,7 @@ module.exports = {
                 $group: {
                     _id: '$empId',
                     name: { $first: '$name' },
-                    date: { $first: '$date' },
+                    date: { $first: '$createdAt' },
                     department: { $first: '$department' },
                     antigen: { $first: '$antigen' },
                     bodyTemperature: { $first: '$bodyTemperature' },
@@ -162,13 +162,13 @@ module.exports = {
         let { name, empId, department, sDate, tDate } = req.body;
         let filterQuery = {};
         if (!name && !empId && !department && (sDate == tDate))
-            filterQuery.createdAt = { $gt: new Date(sDate) };
+            filterQuery.createdAt = { $gte: new Date(sDate) };
         else {
             if (name) filterQuery.name = name.toLowerCase();
             if (empId) filterQuery.empId = empId.toUpperCase();
             if (department) filterQuery.department = department.toUpperCase();
-            if (sDate != tDate) filterQuery.createdAt = { $gt: new Date(sDate), $lte: new Date(tDate).setDate(new Date(tDate).getDate() + 1) };
-            else filterQuery.createdAt = { $gt: new Date(sDate) };
+            if (sDate != tDate) filterQuery.createdAt = { $gte: new Date(sDate), $lte: new Date(tDate).setDate(new Date(tDate).getDate() + 1) };
+            else filterQuery.createdAt = { $gte: new Date(sDate) };
         }
         await MedicalReport
             .find(filterQuery)
