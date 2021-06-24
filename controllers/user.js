@@ -143,6 +143,9 @@ module.exports = {
             await User.find(subQuery).lean(),
             await MedicalReport.aggregate([
                 {
+                    '$match': subQuery
+                },
+                {
                     '$sort': { 'empId': 1, 'createdAt': -1 }
                 },
                 {
@@ -150,7 +153,7 @@ module.exports = {
                         '_id': '$empId',
                         'bodyTemperature': { '$first': '$bodyTemperature' },
                         'antigen': { '$first': '$antigen' },
-                        'qa': {'$first': '$qa'}
+                        'qa': { '$first': '$qa' }
                     }
                 }
             ])
@@ -177,7 +180,12 @@ module.exports = {
      * Web list employees
      */
     listEmployee: async (req, res) => {
-        await User.find({ name: { $ne: 'admin' } }, 'empId email department gender role name mobile')
+        let access = req.verifiedToken.access;
+        let subQuery = { name: { $ne: 'admin' }, department: { $ne: 'ALL' } };
+        if (access.length > 0 && access[0] != 'ALL') {
+            subQuery.department = { $in: access };
+        }
+        await User.find(subQuery, 'empId email department gender role name mobile')
             .exec((err, data) => {
                 if (err) errorHandler(req, res, err);
                 else successHandler(req, res, toJapanese['Data listed successfully'], data);
