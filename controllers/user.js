@@ -161,8 +161,11 @@ module.exports = {
                 else unregistered += 1;
             });
             reports.forEach((report) => {
-                if (report.antigen == 'Positive' || report.bodyTemperature > 37.4 || report.antigen == '陽性') 
-                infected += 1;
+                if (report.antigen == 'Positive'
+                    || report.bodyTemperature > 37.4
+                    || report.antigen == '陽性'
+                    || ['病状らしき事象あり', '体調不良（自宅療養）', '体調不良（病院通院）'].includes(report.qa[0].answer))
+                    infected += 1;
             })
             successHandler(req, res, toJapanese['Success'], { total, registered, infected, unregistered });
         }).catch(e => errorHandler(req, res, e));
