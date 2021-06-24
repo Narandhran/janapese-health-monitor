@@ -35,6 +35,7 @@ module.exports = {
     addReport: async (req, res) => {
         let persisted = req.body;
         persisted.uuid = req.verifiedToken.uuid;
+        persisted.date = Date.now();
         await MedicalReport
             .create(persisted, (err, data) => {
                 if (err) errorHandler(req, res, err);
