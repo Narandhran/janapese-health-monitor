@@ -149,7 +149,8 @@ module.exports = {
                     '$group': {
                         '_id': '$empId',
                         'bodyTemperature': { '$first': '$bodyTemperature' },
-                        'antigen': { '$first': '$antigen' }
+                        'antigen': { '$first': '$antigen' },
+                        'qa': {'$first': '$qa'}
                     }
                 }
             ])
