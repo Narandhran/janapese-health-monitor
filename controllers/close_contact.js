@@ -33,7 +33,7 @@ module.exports = {
             });
             await MedicalReport
                 .find({ uuid: { $in: uuids } })
-                .sort({ antigen: -1, bodyTemperature: -1 })
+                .sort({ createdAt: -1 })
                 .exec((err, data) => {
                     if (err) errorHandler(req, res, err);
                     else successHandler(req, res, toJapanese['Data listed successfully'], data);
