@@ -46,7 +46,7 @@ module.exports = {
      * Web View infected people 
      */
     infectedPeople: async (req, res) => {
-          let matchQuery = {
+        let matchQuery = {
             $or: [
                 { bodyTemperature: { $gt: 37.4 } },
                 { antigen: { $in: ['陽性', '擬陽性'] } },
@@ -60,7 +60,7 @@ module.exports = {
                 }
             ]
         };
-        let department = req.verifiedToken.access;
+        let department = { $ne: 'ALL' };
         if (department.length > 0 && department[0] != 'ALL')
             matchQuery.department = { $in: department };
         await MedicalReport.aggregate([
