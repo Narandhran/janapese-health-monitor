@@ -165,13 +165,13 @@ module.exports = {
         let { name, empId, department, sDate, tDate } = req.body;
         let filterQuery = {};
         if (!name && !empId && !department && (sDate == tDate))
-            filterQuery.createdAt = { $gte: new Date(sDate) };
+            filterQuery.createdAt = { $gte: new Date(sDate + 'T00:00:00Z'), $lt: new Date(tDate + 'T23:59:00Z') };
         else {
             if (name) filterQuery.name = name.toLowerCase();
             if (empId) filterQuery.empId = empId.toUpperCase();
             if (department) filterQuery.department = department.toUpperCase();
             if (sDate != tDate) filterQuery.createdAt = { $gte: new Date(sDate), $lte: new Date(tDate).setDate(new Date(tDate).getDate() + 1) };
-            else filterQuery.createdAt = { $gte: new Date(sDate) };
+            else filterQuery.createdAt = { $gte: new Date(sDate + 'T00:00:00Z'), $le: new Date(tDate + 'T23:59:00Z') };
         }
         await MedicalReport
             .find(filterQuery)
