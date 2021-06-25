@@ -136,40 +136,49 @@ module.exports = {
         let total = 0, registered = 0, infected = 0, unregistered = 0;
         let access = req.verifiedToken.access;
         let subQuery = { 'department': { $ne: 'ALL' } };
+        let matchQuery = {
+            $or: [
+                { bodyTemperature: { $gt: 37.4 } },
+                { antigen: { $in: ['陽性', '擬陽性'] } },
+                {
+                    'qa.question': '1 状態（必須）',
+                    'qa.answer': {
+                        '$in': [
+                            '病状らしき事象あり', '体調不良（自宅療養）', '体調不良（病院通院）'
+                        ]
+                    }
+                }
+            ]
+        };
+        matchQuery.department = { $ne: 'ALL' };
         if (access.length > 0 && access[0] != 'ALL') {
             subQuery = { 'department': { $in: access } };
+            matchQuery.department = { $in: department };
         }
         Promise.all([
             await User.find(subQuery).lean(),
             await MedicalReport.aggregate([
                 {
-                    '$match': subQuery
+                    '$match': matchQuery
                 },
                 {
                     '$sort': { 'empId': 1, 'createdAt': -1 }
                 },
                 {
                     '$group': {
-                        '_id': '$empId',
-                        'bodyTemperature': { '$first': '$bodyTemperature' },
-                        'antigen': { '$first': '$antigen' },
-                        'qa': { '$first': '$qa' }
+                        '_id': '$empId'
                     }
                 }
             ])
         ]).then((data) => {
-            let users = data[0], reports = data[1];
+            let users = data[0];
+            infected = data[1].length;
             users.forEach((user) => {
                 total += 1;
                 if (user.status) registered += 1;
                 else unregistered += 1;
             });
-            reports.forEach((report) => {
-                if (['陽性', '擬陽性'].includes(report.antigen)
-                    || report.bodyTemperature > 37.4
-                    || ['病状らしき事象あり', '体調不良（自宅療養）', '体調不良（病院通院）'].includes(report.qa[0].answer))
-                    infected += 1;
-            })
+            
             successHandler(req, res, toJapanese['Success'], { total, registered, infected, unregistered });
         }).catch(e => errorHandler(req, res, e));
 
