@@ -60,7 +60,8 @@ module.exports = {
                 }
             ]
         };
-        let department = { $ne: 'ALL' };
+
+        matchQuery.department = { $ne: 'ALL' };
         if (department.length > 0 && department[0] != 'ALL')
             matchQuery.department = { $in: department };
         await MedicalReport.aggregate([
