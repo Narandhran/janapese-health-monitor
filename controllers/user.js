@@ -166,19 +166,20 @@ module.exports = {
                 },
                 {
                     '$group': {
-                        '_id': '$empId'
+                        '_id': '$empId',
+                        'date': {
+                            '$first': '$createdAt'
+                        }
                     }
                 }
-            ])
+            ]),
+            await MedicalReport.find({ createdAt: { $gt: new Date().setHours(0, 0, 0, 0) } }).lean()
         ]).then((data) => {
-            let users = data[0];
-            infected = data[1].length;
-            users.forEach((user) => {
-                total += 1;
-                if (user.status) registered += 1;
-                else unregistered += 1;
-            });
-            
+            let users = data[0], reports = data[1] ;
+            total = users.length;
+            infected = reports.length;
+            registered = data[2].length;
+            unregistered = total - registered;
             successHandler(req, res, toJapanese['Success'], { total, registered, infected, unregistered });
         }).catch(e => errorHandler(req, res, e));
 
