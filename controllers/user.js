@@ -5,6 +5,7 @@
 **/
 const User = require('../models/user');
 const MedicalReport = require('../models/medical_report');
+const moment = require('moment');
 const { validate } = require('../utils/crypto');
 const { sign } = require('../utils/jwt');
 const { initAdmin, verifyOTP, toJapanese } = require('../utils/constant');
@@ -173,7 +174,7 @@ module.exports = {
                     }
                 }
             ]),
-            await MedicalReport.find({ createdAt: { $gt: new Date().setHours(0, 0, 0, 0) } }).lean()
+            await MedicalReport.find({ createdAt: { $gt: moment(new Date).format('YYYY-MM-DD') } }).lean()
         ]).then((data) => {
             let users = data[0], reports = data[1] ;
             total = users.length;
