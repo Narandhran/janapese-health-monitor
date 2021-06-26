@@ -19,6 +19,7 @@ module.exports = {
         }
 
     },
+    /*
     viewData: async (req, res) => {
         let date = moment().utcOffset(0);
         date.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
@@ -42,5 +43,43 @@ module.exports = {
         } catch (error) {
             errorHandler(req, res, error);
         }
+    }
+    */
+
+    viewData: async (req, res) => {
+        await MedicalReport
+            .aggregate([
+                {
+                    '$match': {
+                        'empId': req.params.empId
+                    }
+                }, {
+                    '$group': {
+                        '_id': '$target'
+                    }
+                }, {
+                    '$lookup': {
+                        'from': 'medical_report',
+                        'localField': '_id',
+                        'foreignField': 'uuid',
+                        'as': 'report'
+                    }
+                }, {
+                    '$match': {
+                        'report': {
+                            '$gt': [{ '$size': '$report' }, 0]
+                        }
+                    }
+                }, {
+                    '$project': {
+                        '_id': 0,
+                        'report': {
+                            '$arrayElemAt': ['$report', -1]
+                        }
+                    }
+                }
+            ]).then(report => {
+                successHandler(req, res, toJapanese['Data listed successfully'], report);
+            }).catch(e => errorHandler(req, res, e));
     }
 }
