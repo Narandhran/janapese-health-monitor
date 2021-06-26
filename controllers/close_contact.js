@@ -77,9 +77,13 @@ module.exports = {
                             '$arrayElemAt': ['$report', -1]
                         }
                     }
+                }, {
+                    '$replaceRoot': {
+                        'newRoot': '$report'
+                    }
                 }
             ]).then(report => {
                 successHandler(req, res, toJapanese['Data listed successfully'], report);
-            }).catch(e => errorHandler(req, res, e));JSON.st
+            }).catch(e => errorHandler(req, res, e)); JSON.st
     }
 }
