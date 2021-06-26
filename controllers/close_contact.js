@@ -47,7 +47,7 @@ module.exports = {
     */
 
     viewData: async (req, res) => {
-        await MedicalReport
+        await CloseContact
             .aggregate([
                 {
                     '$match': {
@@ -80,6 +80,6 @@ module.exports = {
                 }
             ]).then(report => {
                 successHandler(req, res, toJapanese['Data listed successfully'], report);
-            }).catch(e => errorHandler(req, res, e));
+            }).catch(e => errorHandler(req, res, e));JSON.st
     }
 }
