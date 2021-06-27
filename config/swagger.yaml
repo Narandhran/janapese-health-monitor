@@ -940,7 +940,7 @@ paths:
                 type: array
                 items: 
                   type: string
-  /close_contact/w/view/{empId}:
+  /close_contact/w/view/{uuid}:
     get:
       summary: View closed contact (W)
       tags: 
@@ -961,7 +961,7 @@ paths:
           description: Bad request
       parameters:
         - in: path
-          name: empId
+          name: uuid
           required: true
           description: ''
           type: string

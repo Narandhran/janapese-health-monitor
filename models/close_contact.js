@@ -2,10 +2,9 @@ const mongoose = require('mongoose');
 var uniqueValidator = require('mongoose-unique-validator');
 
 const closeContactSchema = new mongoose.Schema({
-    empId: {
+    source: {
         type: String,
-        uppercase: true,
-        index: true
+        lowercase: true
     },
     target: {
         type: String,

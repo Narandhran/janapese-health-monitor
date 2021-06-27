@@ -10,7 +10,8 @@ module.exports = {
         if (closedContacts.length > 0) {
             let persisted = [];
             closedContacts.forEach(e => {
-                persisted.push({ empId: req.verifiedToken.empId, target: e });
+                persisted.push({ source: req.verifiedToken.uuid, target: e });
+                persisted.push({ source: e, target: req.verifiedToken.uuid });
             });
             await CloseContact.insertMany(persisted, (err, data) => {
                 if (err) errorHandler(req, res, err);
@@ -19,34 +20,69 @@ module.exports = {
         }
 
     },
-    /*
     viewData: async (req, res) => {
-        let date = moment().utcOffset(0);
-        date.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-        try {
-            let ccList = await CloseContact
-                .find({
-                    empId: req.params.empId,
-                    createdAt: { $gt: date.subtract(14, 'days') }
-                }).lean();
-            let uuids = ccList.map(e => {
-                return (e.target).toLowerCase();
-            });
-            await MedicalReport
-                .find({ uuid: { $in: uuids } })
-                .sort({ createdAt: -1 })
-                .exec((err, data) => {
-                    if (err) errorHandler(req, res, err);
-                    else successHandler(req, res, toJapanese['Data listed successfully'], data);
-                });
+        let { uuid } = request.params;
+        await CloseContact.aggregate([
+            {
+                $match: {
+                    createdAt: { $gt: moment(new Date).subtract(7, 'days').format('YYYY-MM-DD') },
+                    source: uuid,
+                    target: { $ne: '' }
+                }
+            },
+            {
+                $sort: {
+                    target: 1,
+                    createdAt: -1
+                }
+            },
+            {
+                $group: {
+                    _id: { source: '$source', target: '$target' }
+                },
+                recentDate: {
+                    $first: '$createdAt'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: '_id.target',
+                    foreignField: 'uuid',
+                    as: 'users'
+                }
+            },
+            {
+                $match: {
+                    users: {
+                        $gt: [{ $size: '$users' }, 0]
+                    }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    source: '$_id.source',
+                    target: '$_id.target',
+                    recentDate: 1,
+                    user: { $arrayElemAt: ["$users", 0] }
+                }
+            },
+            {
+                $project: {
+                    source: 1,
+                    target: 1,
+                    recentDate: 1,
+                    empId: '$user.empId',
+                    name: '$user.name'
+                }
+            }
+        ]).then(ccList => {
+            successHandler(req, res, toJapanese['Data listed successfully'], ccList);
+        }).catch(e => errorHandler(req, res, e));
 
-        } catch (error) {
-            errorHandler(req, res, error);
-        }
-    }
-    */
-
-    viewData: async (req, res) => {
+    },
+    viewReport: async (req, res) => {
         await CloseContact
             .aggregate([
                 {
@@ -84,6 +120,6 @@ module.exports = {
                 }
             ]).then(report => {
                 successHandler(req, res, toJapanese['Data listed successfully'], report);
-            }).catch(e => errorHandler(req, res, e)); JSON.st
+            }).catch(e => errorHandler(req, res, e));
     }
 }

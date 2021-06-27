@@ -8,7 +8,7 @@ const MedicalReport = require('../models/medical_report');
  * Send Push notification on every monday, wednesday and friday
  */
 
-module.exports.sendFCMremainder = SCHEDULE.scheduleJob('30 6 * * 1,3,5', async function () {
+module.exports.sendFCMremainder = SCHEDULE.scheduleJob('30 1 * * 1,3,5', async function () {
     let date = moment(new Date()).format("YYYY-MM-DD")
     await MedicalReport.find({ createdAt: { $gt: date } }, async (err, data) => {
         if (err) logger.error(`${err.status || 400} - ${e.message}`);
@@ -23,7 +23,7 @@ module.exports.sendFCMremainder = SCHEDULE.scheduleJob('30 6 * * 1,3,5', async f
             //FCM logic
             let bodyMessage = '本日の健康状態の登録がまだ実施されておりません。'
                 + '健康状態の入力後、登録をお願いします。'
-                + '未登録日：06月11日分 ' + moment(new Date()).format("DD/MM/YYYY")
+                + '未登録日：' + moment(new Date()).format("DD/MM/YYYY").toString()
                 + ' 従業員の皆様とそのご家族様を守る為、ご協力をお願いいたします';
             let options = loadFcmMessage(senderIds, '通知メッセージ', bodyMessage);
             sendFcmMessagePromise(options)

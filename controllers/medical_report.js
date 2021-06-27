@@ -76,6 +76,7 @@ module.exports = {
                 $group: {
                     _id: '$empId',
                     name: { $first: '$name' },
+                    uuid: { $first: '$uuid' },
                     date: { $first: '$createdAt' },
                     department: { $first: '$department' },
                     antigen: { $first: '$antigen' },
@@ -90,6 +91,7 @@ module.exports = {
                     _id: 0,
                     empId: '$_id',
                     name: 1,
+                    uuid: 1,
                     date: 1,
                     department: 1,
                     antigen: 1,
@@ -127,6 +129,7 @@ module.exports = {
                 $group: {
                     _id: '$empId',
                     name: { $first: '$name' },
+                    uuid: { $first: '$uuid' },
                     date: { $first: '$createdAt' },
                     department: { $first: '$department' },
                     antigen: { $first: '$antigen' },
@@ -141,6 +144,7 @@ module.exports = {
                     _id: 0,
                     empId: '$_id',
                     name: 1,
+                    uuid: 1,
                     date: 1,
                     department: 1,
                     antigen: 1,
