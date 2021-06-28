@@ -74,6 +74,7 @@ module.exports = {
                     target: 1,
                     recentDate: 1,
                     empId: '$user.empId',
+                    department: '$user.department',
                     name: '$user.name'
                 }
             }

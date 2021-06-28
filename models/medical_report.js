@@ -32,7 +32,7 @@ const medicalReportSchema = new mongoose.Schema({
     // },
     antigen: {
         type: String,
-        required: true
+        default: ''
     },
     // infectionRisk: {
     //     type: Boolean,
@@ -44,7 +44,7 @@ const medicalReportSchema = new mongoose.Schema({
         required: true
     },
     antigenImg: {
-        type: String
+        type: String,
     },
     bodyTemperatureImg: {
         type: String

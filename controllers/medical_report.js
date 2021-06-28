@@ -175,7 +175,7 @@ module.exports = {
             if (empId) filterQuery.empId = empId.toUpperCase();
             if (department) filterQuery.department = department.toUpperCase();
             if (sDate != tDate) filterQuery.createdAt = { $gte: new Date(sDate), $lte: new Date(tDate).setDate(new Date(tDate).getDate() + 1) };
-            else filterQuery.createdAt = { $gte: new Date(sDate + 'T00:00:00Z'), $le: new Date(tDate + 'T23:59:00Z') };
+            else filterQuery.createdAt = { $gte: new Date(sDate + 'T00:00:00Z'), $lte: new Date(tDate + 'T23:59:00Z') };
         }
         await MedicalReport
             .find(filterQuery)
@@ -200,13 +200,20 @@ module.exports = {
     },
     getHistoryByUser: async (req, res) => {
         let { week = 1 } = req.params;
-        week *= 7;
-        let date = moment().utcOffset(0);
-        date.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+        let days = week * 7;
+        let sDate = moment().utcOffset(0);
+        let tDate = moment().format('YYYY-MM-DD').toString();
+        sDate.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+        tDate.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+        let sQuery = { $lte: new Date(tDate + 'T23:59:00Z') };
+
+        if (week > 1) {
+            sQuery.$lte = sDate.subtract(((days / week) - 1) * 7, 'days')
+        }
         await MedicalReport
             .find({
                 empId: req.verifiedToken.empId,
-                createdAt: { $gt: date.subtract(week, 'days') }
+                createdAt: { $gt: sDate.subtract(week, 'days'), $lte: sQuery.$lte }
             })
             .sort({ createdAt: -1 })
             .exec((err, data) => {
