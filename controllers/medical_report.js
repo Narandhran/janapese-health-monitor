@@ -204,7 +204,7 @@ module.exports = {
     getHistoryByUser: async (req, res) => {
         let { week = 1 } = req.params;
         let days = parseInt(week) * 7;
-        let sDate = new Date(moment().format('YYYY-MM-DD'));
+        let sDate = moment().format('YYYY-MM-DD');
         let sQuery = {
             $gt: sDate.subtract(days, 'days'),
             $lte: new Date(moment().format('YYYY-MM-DD').toString() + 'T23:59:00Z')
