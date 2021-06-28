@@ -113,10 +113,13 @@ module.exports = {
      * Web view all 
      */
     listAllReport: async (req, res) => {
+        let { filter = 'register' } = req.params;
         let matchQuery = {};
         let department = req.verifiedToken.access;
         if (department.length > 0 && department[0] != 'ALL')
-            matchQuery = { department: { $in: department } }
+            matchQuery = { department: { $in: department }, createdAt: { $gt: new Date(moment().format('YYYY-MM-DD').toString() + 'T00: 00: 00Z') } };
+        if (filter == 'unregister')
+            matchQuery.createdAt = { $lt: new Date(moment().format('YYYY-MM-DD').toString() + 'T00: 00: 00Z') };
 
         await MedicalReport.aggregate([
             {
@@ -202,10 +205,8 @@ module.exports = {
         let { week = 1 } = req.params;
         let days = week * 7;
         let sDate = moment().utcOffset(0);
-        let tDate = moment().format('YYYY-MM-DD').toString();
         sDate.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-        tDate.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-        let sQuery = { $lte: new Date(tDate + 'T23:59:00Z') };
+        let sQuery = { $lte: new Date(moment().format('YYYY-MM-DD').toString() + 'T23:59:00Z') };
 
         if (week > 1) {
             sQuery.$lte = sDate.subtract(((days / week) - 1) * 7, 'days')
