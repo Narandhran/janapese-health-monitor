@@ -12,10 +12,7 @@ const { FCM_CONSTANT, toJapanese } = require('../utils/constant');
 module.exports = {
     insertMessages: async (req, res) => {
         var { isForAll, userIds, message } = req.body;
-        let bodyMessage = '本日の健康状態の登録がまだ実施されておりません。'
-            + '健康状態の入力後、登録をお願いします。'
-            + '未登録日：06月11日分 ' + moment(new Date()).format("YYYY/MM/DD") +
-            + '従業員の皆様とそのご家族様を守る為、ご協力をお願いいたします';
+        let bodyMessage = message;
         if (isForAll) {
             try {
                 let newMessages = new Message({ empId: 'FORALL', title: '通知メッセージ ' + moment(new Date()).format("DD/MM/YYYY"), message: message || bodyMessage, isForAll: true, isRead: true });
