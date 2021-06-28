@@ -207,13 +207,13 @@ module.exports = {
         let days = parseInt(week) * 7;
         let sDate = moment();
         let sQuery = {
-            $gt: sDate.subtract(days, 'days'),
+            $gt: moment().subtract(days, 'days').format('YYYY-MM-DD'),
             $lte: new Date(moment().format('YYYY-MM-DD').toString() + 'T23:59:00Z')
         };
 
         if (parseInt(week) > 1) {
-            sQuery.$gt = sDate.subtract(days, 'days').format('YYYY-MM-DD');
-            sQuery.$lte = sDate.subtract(((days / 7) - 1) * 7, 'days').hour(23).minute(59).second(59);
+            sQuery.$gt = moment().subtract(days, 'days').format('YYYY-MM-DD');
+            sQuery.$lte = moment().subtract(((days / 7) - 1) * 7, 'days').hour(23).minute(59).second(59);
         }
         await MedicalReport
             .find({
