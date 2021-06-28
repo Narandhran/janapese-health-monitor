@@ -204,15 +204,14 @@ module.exports = {
     getHistoryByUser: async (req, res) => {
         let { week = 1 } = req.params;
         let days = parseInt(week) * 7;
-        let sDate = moment().utcOffset(0);
-        sDate.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+        let sDate = new Date(moment().format('YYYY-MM-DD'));
         let sQuery = {
             $gt: sDate.subtract(days, 'days'),
             $lte: new Date(moment().format('YYYY-MM-DD').toString() + 'T23:59:00Z')
         };
 
         if (parseInt(week) > 1) {
-            sQuery$gt: sDate.subtract(days, 'days');
+            sQuery.$gt = sDate.subtract(days, 'days');
             sQuery.$lte = sDate.subtract(((days / 7) - 1) * 7, 'days')
         }
         await MedicalReport
