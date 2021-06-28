@@ -41,7 +41,7 @@ module.exports = {
                             let tokens = [], messages = [];
                             users.forEach(user => {
                                 tokens.push(user.fcmToken);
-                                messages.push({ empId: user.empId, title: '通知メッセージ ' + moment(new Date()).format("YYYY//MM/DD"), message: message || bodyMessage, isForAll: false });
+                                messages.push({ empId: user.empId, title: '通知メッセージ ' + moment(new Date()).format("YYYY/MM/DD"), message: message || bodyMessage, isForAll: false });
                             });
                             await Message.insertMany(messages);
                             let messageOption = loadFcmMessage(
