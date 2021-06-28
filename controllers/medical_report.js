@@ -117,12 +117,19 @@ module.exports = {
         let matchQuery = {};
         matchQuery.createdAt = { $gt: new Date(moment().format('YYYY-MM-DD').toString() + 'T00:00:00Z') }
         let department = req.verifiedToken.access;
+        let reports = await MedicalReport.find({ $gt: new Date(moment().format('YYYY-MM-DD').toString() + 'T00:00:00Z') }, 'uuid').lean();
+        let uuids = reports.map(e => {
+            return e.uuid;
+        })
+
         if (department.length > 0 && department[0] != 'ALL')
             matchQuery = {
                 department: { $in: department },
             };
-        if (filter == 'unregister')
+        if (filter == 'unregister') {
             matchQuery.createdAt = { $lt: new Date(moment().format('YYYY-MM-DD').toString() + 'T00:00:00Z') };
+            matchQuery.uuid = { $nin: uuids };
+        }
 
         await MedicalReport.aggregate([
             {
