@@ -21,7 +21,7 @@ module.exports = {
 
     },
     viewData: async (req, res) => {
-        let { uuid } = request.params;
+        let { uuid } = req.params;
         await CloseContact.aggregate([
             {
                 $match: {
