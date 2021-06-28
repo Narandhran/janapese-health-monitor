@@ -203,6 +203,7 @@ module.exports = {
     },
     getHistoryByUser: async (req, res) => {
         let { week = 1 } = req.params;
+        console.log('week: ' + week);
         let days = parseInt(week) * 7;
         let sDate = moment();
         let sQuery = {
