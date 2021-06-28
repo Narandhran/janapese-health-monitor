@@ -25,7 +25,7 @@ module.exports = {
         await CloseContact.aggregate([
             {
                 $match: {
-                    createdAt: { $gt: moment(new Date).subtract(7, 'days').format('YYYY-MM-DD') },
+                    createdAt: { $gt: new Date(moment(new Date).subtract(14, 'days').format('YYYY-MM-DD').toString()) },
                     source: uuid,
                     target: { $ne: '' }
                 }
