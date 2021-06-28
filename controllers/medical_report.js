@@ -115,11 +115,14 @@ module.exports = {
     listAllReport: async (req, res) => {
         let { filter = 'register' } = req.params;
         let matchQuery = {};
+        matchQuery.createdAt = { $gt: new Date(moment().format('YYYY-MM-DD').toString() + 'T00:00:00Z') }
         let department = req.verifiedToken.access;
         if (department.length > 0 && department[0] != 'ALL')
-            matchQuery = { department: { $in: department }, createdAt: { $gt: new Date(moment().format('YYYY-MM-DD').toString() + 'T00: 00: 00Z') } };
+            matchQuery = {
+                department: { $in: department },
+            };
         if (filter == 'unregister')
-            matchQuery.createdAt = { $lt: new Date(moment().format('YYYY-MM-DD').toString() + 'T00: 00: 00Z') };
+            matchQuery.createdAt = { $lt: new Date(moment().format('YYYY-MM-DD').toString() + 'T00:00:00Z') };
 
         await MedicalReport.aggregate([
             {
@@ -203,7 +206,6 @@ module.exports = {
     },
     getHistoryByUser: async (req, res) => {
         let { week = 1 } = req.params;
-        console.log('week: ' + week);
         let days = parseInt(week) * 7;
         let sDate = moment();
         let sQuery = {

@@ -745,7 +745,7 @@ paths:
           description: Content not found
         '400':
           description: Bad request
-  /report/p/list_all:
+  /report/p/list_all/{filter}:
     get:
       summary: List all people (P)
       tags: 
@@ -764,6 +764,12 @@ paths:
           description: Content not found
         '400':
           description: Bad request
+      parameters:
+        - in: path
+          name: filter
+          required: true
+          description: ''
+          type: string
   /report/p/search_filter:
     post:
       summary: Filter - result screen (P)
