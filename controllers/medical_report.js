@@ -117,7 +117,7 @@ module.exports = {
         let matchQuery = {};
         matchQuery.createdAt = { $gt: new Date(moment().format('YYYY-MM-DD').toString() + 'T00:00:00Z') }
         let department = req.verifiedToken.access;
-        let reports = await MedicalReport.find({ $gt: new Date(moment().format('YYYY-MM-DD').toString() + 'T00:00:00Z') }, 'uuid').lean();
+        let reports = await MedicalReport.find({ createdAt: { $gt: new Date(moment().format('YYYY-MM-DD').toString() + 'T00:00:00Z') } }, 'uuid').lean();
         let uuids = reports.map(e => {
             return e.uuid;
         })
