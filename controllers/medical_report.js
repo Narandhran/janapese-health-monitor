@@ -213,7 +213,7 @@ module.exports = {
 
         if (week > 1) {
             sQuery$gt: sDate.subtract(days, 'days');
-            sQuery.$lte = sDate.subtract(((days / week) - 1) * 7, 'days')
+            sQuery.$lte = sDate.subtract(((days / 7) - 1) * 7, 'days')
         }
         await MedicalReport
             .find({
