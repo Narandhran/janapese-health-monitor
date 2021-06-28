@@ -38,11 +38,11 @@ module.exports = {
             },
             {
                 $group: {
-                    _id: { source: '$source', target: '$target' }
+                    _id: { source: '$source', target: '$target' },
+                    recentDate: {
+                        $first: '$createdAt'
+                    }
                 },
-                recentDate: {
-                    $first: '$createdAt'
-                }
             },
             {
                 $lookup: {
