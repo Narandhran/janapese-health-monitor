@@ -206,15 +206,19 @@ module.exports = {
         let days = week * 7;
         let sDate = moment().utcOffset(0);
         sDate.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-        let sQuery = { $lte: new Date(moment().format('YYYY-MM-DD').toString() + 'T23:59:00Z') };
+        let sQuery = {
+            $gt: sDate.subtract(days, 'days'),
+            $lte: new Date(moment().format('YYYY-MM-DD').toString() + 'T23:59:00Z')
+        };
 
         if (week > 1) {
+            sQuery$gt: sDate.subtract(days, 'days');
             sQuery.$lte = sDate.subtract(((days / week) - 1) * 7, 'days')
         }
         await MedicalReport
             .find({
                 empId: req.verifiedToken.empId,
-                createdAt: { $gt: sDate.subtract(week, 'days'), $lte: sQuery.$lte }
+                createdAt: { $gt: sQuery.$gt, $lte: sQuery.$lte }
             })
             .sort({ createdAt: -1 })
             .exec((err, data) => {
