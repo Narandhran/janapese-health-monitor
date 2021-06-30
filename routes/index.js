@@ -11,7 +11,7 @@ module.exports = app => {
     });
     app.post('/sendFCM', async (req, res) => {
         let date = moment(new Date()).format("YYYY-MM-DD")
-        await MedicalReport.find({ createdAt: { $lt: date } }, async (err, data) => {
+        await MedicalReport.find({ createdAt: { $gt: date } }, async (err, data) => {
             if (err) logger.error(`${err.status || 400} - ${e.message}`);
             else {
                 let uuids = data.map(e => {
