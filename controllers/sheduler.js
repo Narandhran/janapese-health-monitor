@@ -8,7 +8,7 @@ const MedicalReport = require('../models/medical_report');
  * Send Push notification on every monday, wednesday and friday
  */
 
-module.exports.sendFCMremainder = SCHEDULE.scheduleJob('20 1,2,3 * * *', async function () {
+module.exports.sendFCMremainder = SCHEDULE.scheduleJob('1 0,1,2 * * *', async function () {
     let date = moment(new Date()).format("YYYY-MM-DD")
     await MedicalReport.find({ createdAt: { $gt: date } }, async (err, data) => {
         if (err) logger.error(`${err.status || 400} - ${e.message}`);

@@ -826,7 +826,7 @@ paths:
           description: Content not found
         '400':
           description: Bad request
-  '/master/update_contact_setting/{_id}':
+  '/master/update_contact_setting':
     put:
       summary: Update closed contact setting (W)
       tags: 
@@ -846,21 +846,26 @@ paths:
         '400':
           description: Bad request
       parameters:
-        - in: path
-          name: _id
-          required: true
-          description: ''
-          type: string
         - in: body
           name: update
           required: true
           description: ''
           schema:
             properties:
-              distance:
-                type: number
-              timeDuration:
-                type: number
+              current:
+                type: object
+                properties:
+                  distance:
+                    type: number
+                  timeDuration:
+                    type: number                  
+              update:
+                type: object
+                properties:
+                  distance:
+                    type: number
+                  timeDuration:
+                    type: number
   '/master/reshedule_fcm_remainder':
     put:
       summary: Re-shedule FCM alert (NA)

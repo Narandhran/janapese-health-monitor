@@ -8,7 +8,7 @@ const MedicalReport = require('../models/medical_report');
 const moment = require('moment');
 const { validate } = require('../utils/crypto');
 const { sign } = require('../utils/jwt');
-const { initAdmin, verifyOTP, toJapanese } = require('../utils/constant');
+const { initAdmin, verifyOTP, toJapanese, toEnglish } = require('../utils/constant');
 const { loadMulter } = require('../utils/multer');
 const GENERATOR = require('../utils/string_generator');
 const { sendMail } = require('../utils/mailer');
@@ -54,18 +54,25 @@ module.exports = {
                     }, async function (err, result) {
                         if (err) errorHandler(req, res, err);
                         else if (result.length > 0) {
+                            let persisted = [];
                             result.map((e, i) => {
-                                if (e.email == '' || e.email == undefined || e.email == null
-                                    || e.empId == '' || e.empId == undefined || e.empId == null)
+                                let temp = {};
+                                if (e.メールアドレス == '' || e.メールアドレス == undefined || e.メールアドレス == null
+                                    || e.従業員ID == '' || e.従業員ID == undefined || e.従業員ID == null)
                                     dataError = true;
-                                if (e.access)
-                                    e.access = ((e.access).toUpperCase()).split(',');
-                                else e.access = []
-                                e.role = e.role ? (e.role).toUpperCase() : 'USER';
-                                e.email = (e.email).toLowerCase();
-                                e.uuid = GENERATOR.generateUUID();
+                                else if (e.アクセス権)
+                                    temp.access = ((e.アクセス権).toUpperCase()).split(',');
+                                else
+                                    temp.access = []
+                                temp.role = e.役職 ? toEnglish[e.役職] : 'USER';
+                                temp.email = (e.メールアドレス).toLowerCase();
+                                temp.empId = e.従業員ID;
+                                temp.name = e.名前;
+                                temp.uuid = GENERATOR.generateUUID();
+                                persisted.push(temp);
+                                temp = {};
                             });
-                            let users = result;
+                            let users = persisted;
                             if (dataError) errorHandler(req, res, new Error(toJapanese['Employee number and Email should not be empty, check the excel sheet properly']));
                             else {
                                 await User.insertMany(users, (err, data) => {
@@ -74,13 +81,12 @@ module.exports = {
                                         successHandler(req, res, toJapanese['Data imported successfully'], {});
                                 });
                             }
-
                         }
                         else errorHandler(req, res, new Error(toJapanese['Data is either empty or not valid']));
 
                     });
                 } catch (e) {
-                    errorHandler(req, res, err);
+                    errorHandler(req, res, e);
                 }
             }
         });
@@ -176,7 +182,7 @@ module.exports = {
             ]),
             await MedicalReport.find({ createdAt: { $gt: moment(new Date).format('YYYY-MM-DD') } }).lean()
         ]).then((data) => {
-            let users = data[0], reports = data[1] ;
+            let users = data[0], reports = data[1];
             total = users.length;
             infected = reports.length;
             registered = data[2].length;

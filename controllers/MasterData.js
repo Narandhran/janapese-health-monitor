@@ -11,8 +11,9 @@ const { toJapanese } = require('../utils/constant');
 
 module.exports = {
     updateClosedContactSetting: async (req, res) => {
+        console.log(JSON.stringify(req.body));
         await ClosedContactSetting
-            .findByIdAndUpdate(req.params._id, { closedContactSetting: req.body })
+            .findOneAndUpdate(req.body.current, req.body.update, { upsert: true })
             .exec((err, data) => {
                 if (err) errorHandler(req, res, err);
                 else
@@ -21,11 +22,13 @@ module.exports = {
     },
     showClosedContactSetting: async (req, res) => {
         await ClosedContactSetting
-            .find({})
+            .find({},'timeDuration distance')
+            .sort({ updatedAt: -1 })
             .exec((err, data) => {
                 if (err) errorHandler(req, res, err);
-                else
-                    successHandler(req, res, toJapanese['Data listed successfully'], data);
+                else if (data.length > 0)
+                    successHandler(req, res, toJapanese['Data listed successfully'], data[0]);
+                else successHandler(req, res, toJapanese['Data listed successfully'], { timeDuration: 15, distance: 10 });
             });
     },
     updateFCMRemainderValue: async (req, res) => {

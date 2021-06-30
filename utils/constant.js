@@ -69,4 +69,8 @@ module.exports.toJapanese = {
     "Password updated successfully": "パスワードが更新されました",
     "OTP verified successfully": "OTP が確認されました",
     "No data": "データがありません"
+};
+module.exports.toEnglish = {
+    "管理者": 'ADMIN',
+    "ユーザー": 'USER'
 }
