@@ -67,5 +67,6 @@ module.exports.toJapanese = {
     "User is not exist, kindly ask admin": "ユーザーが存在しません。管理者にご連絡ください",
     "OTP sent successfully": "OTP を送信しました",
     "Password updated successfully": "パスワードが更新されました",
-    "OTP verified successfully": "OTP が確認されました"
+    "OTP verified successfully": "OTP が確認されました",
+    "No data": "データがありません"
 }

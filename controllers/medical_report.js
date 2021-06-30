@@ -232,8 +232,9 @@ module.exports = {
             .sort({ createdAt: -1 })
             .exec((err, data) => {
                 if (err) errorHandler(req, res, err);
-                else
+                else if (data && data.length > 0)
                     successHandler(req, res, toJapanese['Data listed successfully'], data);
+                else errorHandler(req, res, toJapanese['No data'], data);
             });
     },
     uploadTemperatureImg: async (req, res) => {
