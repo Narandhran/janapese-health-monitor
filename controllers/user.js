@@ -204,7 +204,12 @@ module.exports = {
         await User.find(subQuery, 'empId email department gender role name mobile')
             .exec((err, data) => {
                 if (err) errorHandler(req, res, err);
-                else successHandler(req, res, toJapanese['Data listed successfully'], data);
+                else {
+                    data.map(e => {
+                        e.role = toJapanese[e.role];
+                    });
+                    successHandler(req, res, toJapanese['Data listed successfully'], data)
+                };
             })
     },
     /**
