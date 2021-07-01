@@ -55,7 +55,7 @@ module.exports.toJapanese = {
     "You have not input your data yet": "まだデータを入力していません",
     "Message(s) has been sent": "メッセージを送りました",
     "Something went wrong": "エラーが発生されました",
-    "Viewing messages": "メッセージをみています",
+    "Viewing messages": "データはありません",
     "Employee number and Email should not be empty, check the excel sheet properly": "従業員番号とメールアドレスを入力する必要があります。Excelシートを適切に確認してください",
     "Data imported successfully": "データを読み込みました",
     "Data is either empty or not valid": "データが空いているか無効である",
