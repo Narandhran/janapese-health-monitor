@@ -17,7 +17,7 @@ var loadMulterS3 = (fileSize, filePath) => {
     return multer({
         storage: multerS3({
             s3: s3,
-            bucket: `projectorg/${filePath}`,
+            bucket: `beehealth/${filePath}`,
             contentType: multerS3.AUTO_CONTENT_TYPE,
             acl: 'public-read',
             key: function (req, file, cb) {

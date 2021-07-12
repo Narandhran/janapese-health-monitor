@@ -8,15 +8,6 @@ const Handlebars = require('handlebars');
 const OAuth2 = google.auth.OAuth2;
 const { errorHandler, successHandler } = require('./handler');
 
-/**
- * Mail option 
- * {
- from: '"Japanese Health Monitor" <virtualacc2021@gmail.com>',
- to: 'narandhran@gmail.com,narandhran@ymail.com',
- subject: 'welcome ✔',
- text: 'Hello world',
- * }
- */
 const templateUtil = {
     companyName: '#companyName',
     supportMail: 'customerservice@orgware.com',
@@ -43,8 +34,8 @@ var transporter = createTransport({
     secure: false,
     requireTLS: true,
     auth: {
-        user: 'virtualacc2021@gmail.com',
-        pass: 'Virtual&143'
+        user: 'noreply.beehealth@gmail.com',
+        pass: 'bee$%2021H'
     }
 });
 /*
@@ -76,7 +67,7 @@ module.exports.sendMail = async (req, res, option, data = {}, fileName) => {
         let source = await fs.readFileSync(path.resolve('utils/templates/' + fileName), 'utf8');
         let template = await Handlebars.compile(source);
         return await transporter.sendMail({
-            from: '"Japanese Health Monitor" <virtualacc2021@gmail.com>',
+            from: '"BeeHealth" <noreply.beehealth@gmail.com>',
             ...option,
             html: template({ ...data, ...templateUtil })
         });
