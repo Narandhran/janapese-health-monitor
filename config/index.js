@@ -2,8 +2,9 @@ module.exports.db = {
     prod: {
         username: 'beehealusr',
         password: 'B3eRhed21U',
-        port: '',
-        db: 'beehealth'
+        port: '27017',
+        db: 'beehealth',
+        host: 'localhost'
     }
 }
 
