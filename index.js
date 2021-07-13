@@ -15,6 +15,7 @@ const logger = require('./utils/logger');
 
 
 const { initUser } = require('./controllers/user');
+const { initDepartments } = require('./controllers/department');
 var normalizedPath = require('path').join(__dirname, 'routes');
 
 app
@@ -41,6 +42,7 @@ app
                     require('./routes/' + file)(app);
                 });
             initUser();
+            initDepartments();
             console.log('Server started successfully!')
             // logger.info('Server started successfully!')
         });
